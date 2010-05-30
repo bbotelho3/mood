@@ -1,6 +1,6 @@
 ﻿namespace Mood
 {
-    partial class Form1
+    partial class Form2
     {
         /// <summary>
         /// Required designer variable.
@@ -49,17 +49,15 @@
             this.simpleOpenGlControl1.TabIndex = 0;
             this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
             this.simpleOpenGlControl1.Resize += new System.EventHandler(this.simpleOpenGlControl1_Resize);
-            this.simpleOpenGlControl1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.simpleOpenGlControl1_KeyPress);
-            this.simpleOpenGlControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.simpleOpenGlControl1_KeyDown);
             // 
-            // Form1
+            // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 264);
             this.Controls.Add(this.simpleOpenGlControl1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Form2";
+            this.Text = "Form2";
             this.ResumeLayout(false);
 
         }
@@ -67,7 +65,5 @@
         #endregion
 
         private Tao.Platform.Windows.SimpleOpenGlControl simpleOpenGlControl1;
-
     }
 }
-
