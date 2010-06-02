@@ -18,6 +18,9 @@ namespace Mood
         int y = 1;
 
         int perspective = 100;
+        int rotation = 0;
+
+        Camera camera;
 
         public Form1()
         {
@@ -25,51 +28,109 @@ namespace Mood
 
             simpleOpenGlControl1.InitializeContexts();
 
-            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             //Gl.glShadeModel(Gl.GL_FLAT);
-            Glut.glutInit();
+            //Glut.glutInit();
+            camera = new Camera();
+
+            //Glut.glutInit(&argc, argv);
+            //Glut.glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+            //Glut.glutInitWindowSize(300, 300);
+            //Glut.glutCreateWindow("Camera");
+            //Camera.Move(F3dVector(0.0, 0.0, 3.0));
+            //Camera.MoveForwards(1.0);
+            //Glut.glutDisplayFunc(Display);
+            //Glut.glutReshapeFunc(reshape);
+            //Glut.glutKeyboardFunc(KeyDown);
+            //Glut.glutMainLoop();
         }
 
         private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
         {
-            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
-            Gl.glColor3f(1.0f, 1.0f, 1.0f);
-            Gl.glLoadIdentity();             /* clear the matrix */
-            /* viewing transformation  */
-            Glu.gluLookAt(x, y, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            Gl.glScalef(1.0f, 1.0f, 1.0f);      /* modeling transformation */
-            Gl.glTranslatef(0, 2f, 0);
-            Glut.glutWireCube(1.0f);
-
-            //Glut.glutSolidTeapot(1.0f);
+            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //Gl.glClear(1);
             Gl.glLoadIdentity();
-            Glu.gluLookAt(x, y, 2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            Gl.glColor3f(1.0f, 0, 0);
-            Gl.glScalef(5.0f, 5.0f, 5.0f);
+            camera.Render();
+            Gl.glTranslatef(0.0f, 0.8f, 0.0f);
 
-            Gl.glBegin(Gl.GL_QUADS);
-            {
-                Gl.glVertex3f(0.0f, 0.0f, 0.0f);
-                Gl.glVertex3f(-1.0f, 0f, 0f);
-                Gl.glVertex3f(-1.0f, 0f, -1.0f);
-                Gl.glVertex3f(0f, 0f, -1f);
-            }
-            Gl.glEnd();
+            Gl.glScalef(3.0f, 1.0f, 3.0f);
 
-            Gl.glColor3f(0f, 1, 0);
+            float size = 2.0f;
+            int LinesX = 30;
+            int LinesZ = 30;
 
-            Gl.glBegin(Gl.GL_QUADS);
-            {
-                Gl.glVertex3f(0.0f, 0.0f, 0.0f);
-                Gl.glVertex3f(1.0f, 0f, 0f);
-                Gl.glVertex3f(1.0f, 0f, -1.0f);
-                Gl.glVertex3f(0f, 0f, -1f);
-            }
-            Gl.glEnd();
+            float halfsize = size / 2.0f;
+            Gl.glColor3f(1.0f, 1.0f, 1.0f);
+            Gl.glPushMatrix();
+                Gl.glTranslatef(0.0f, -halfsize, 0.0f);
+                DrawNet(size, LinesX, LinesZ);
+                Gl.glTranslatef(0.0f, size, 0.0f);
+                DrawNet(size, LinesX, LinesZ);
+            Gl.glPopMatrix();
+            Gl.glColor3f(0.0f, 0.0f, 1.0f);
+            Gl.glPushMatrix();
+                Gl.glTranslatef(-halfsize, 0.0f, 0.0f);
+                Gl.glRotatef(90.0f, 0.0f, 0.0f, halfsize);
+                DrawNet(size, LinesX, LinesZ);
+                Gl.glTranslatef(0.0f, -size, 0.0f);
+                DrawNet(size, LinesX, LinesZ);
+            Gl.glPopMatrix();
+            Gl.glColor3f(1.0f, 0.0f, 0.0f);
+            Gl.glPushMatrix();
+                Gl.glTranslatef(0.0f, 0.0f, -halfsize);
+                Gl.glRotatef(90.0f, halfsize, 0.0f, 0.0f);
+                DrawNet(size, LinesX, LinesZ);
+                Gl.glTranslatef(0.0f, size, 0.0f);
+            DrawNet(size, LinesX, LinesZ);
+            Gl.glPopMatrix();
 
             Gl.glFlush();
 
             resize();
+
+            //Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
+            //Gl.glColor3f(1.0f, 1.0f, 1.0f);
+            //Gl.glLoadIdentity();             /* clear the matrix */
+            ///* viewing transformation  */
+
+            //camera.Render();
+            //Glu.gluLookAt(x, y, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+            ////Gl.glRotatef(rotation, 0, 1, 0);
+            //Gl.glScalef(1.0f, 1.0f, 1.0f);      /* modeling transformation */
+            
+            //Gl.glTranslatef(0, 2f, 0);
+
+            ////Glut.glutWireCube(1.0f);
+
+            ////Glut.glutSolidTeapot(1.0f);
+            //Gl.glLoadIdentity();
+            ////Glu.gluLookAt(x, y, 2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+            //Gl.glColor3f(1.0f, 0, 0);
+            //Gl.glScalef(5.0f, 5.0f, 5.0f);
+
+            //Gl.glBegin(Gl.GL_QUADS);
+            //{
+            //    Gl.glVertex3f(0.0f, 0.0f, 0.0f);
+            //    Gl.glVertex3f(-1.0f, 0f, 0f);
+            //    Gl.glVertex3f(-1.0f, 0f, -1.0f);
+            //    Gl.glVertex3f(0f, 0f, -1f);
+            //}
+            //Gl.glEnd();
+
+            //Gl.glColor3f(0f, 1, 0);
+
+            //Gl.glBegin(Gl.GL_QUADS);
+            //{
+            //    Gl.glVertex3f(0.0f, 0.0f, 0.0f);
+            //    Gl.glVertex3f(1.0f, 0f, 0f);
+            //    Gl.glVertex3f(1.0f, 0f, -1.0f);
+            //    Gl.glVertex3f(0f, 0f, -1f);
+            //}
+            //Gl.glEnd();
+
+            //Gl.glFlush();
+
+            //resize();
         }
 
         private void simpleOpenGlControl1_Resize(object sender, EventArgs e)
@@ -95,28 +156,67 @@ namespace Mood
         {
             if (e.KeyCode == Keys.W)
             {
-                perspective -= 10;
-                
+                //perspective -= 1;
+                camera.MoveForwards(-0.1f);
                 simpleOpenGlControl1.Refresh();
             }
             if (e.KeyCode == Keys.S)
             {
-                perspective += 10;
-                
+                //perspective += 1;
+                camera.MoveForwards(0.1f);
                 simpleOpenGlControl1.Refresh();
             }
             if (e.KeyCode == Keys.A)
             {
-                x--;
-                y++;
+                camera.RotateY(5);
                 simpleOpenGlControl1.Refresh();
             }
             if (e.KeyCode == Keys.D)
             {
-                x++;
-                y--;
+                camera.RotateY(-5);
+                simpleOpenGlControl1.Refresh();
+            }
+            if (e.KeyCode == Keys.PageUp)
+            {
+                //x--;
+                //y++;
+                //this.rotation++;
+                camera.RotateX(5);
+                simpleOpenGlControl1.Refresh();
+            }
+            if (e.KeyCode == Keys.PageDown)
+            {
+                //x++;
+                //y--;
+                //this.rotation--;
+                camera.RotateX(-5);
                 simpleOpenGlControl1.Refresh();
             }
         }
+
+        private void DrawNet(float size, int LinesX, int LinesZ)
+        {
+            Gl.glBegin(Gl.GL_LINES);
+            for (int xc = 0; xc < LinesX; xc++)
+            {
+                Gl.glVertex3f(-size / 2.0f + xc / (LinesX - 1) * size,
+                            0.0f,
+                            size / 2.0f);
+                Gl.glVertex3f(-size / 2.0f + xc / (LinesX - 1) * size,
+                            0.0f,
+                            size / -2.0f);
+            }
+            for (int zc = 0; zc < LinesX; zc++)
+            {
+                Gl.glVertex3f(size / 2.0f,
+                            0.0f,
+                            -size / 2.0f + zc / (LinesZ - 1) * size);
+                Gl.glVertex3f(size / -2.0f,
+                            0.0f,
+                            -size / 2.0f + zc / (LinesZ - 1) * size);
+            }
+            Gl.glEnd();
+        }
+
     }
 }
