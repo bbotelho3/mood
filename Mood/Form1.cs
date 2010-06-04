@@ -28,9 +28,9 @@ namespace Mood
 
             simpleOpenGlControl1.InitializeContexts();
 
-            //Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             //Gl.glShadeModel(Gl.GL_FLAT);
-            //Glut.glutInit();
+            Glut.glutInit();
             camera = new Camera();
 
             //Glut.glutInit(&argc, argv);
@@ -47,8 +47,9 @@ namespace Mood
 
         private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
         {
-            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             //Gl.glClear(1);
+            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             Gl.glLoadIdentity();
             camera.Render();
             Gl.glTranslatef(0.0f, 0.8f, 0.0f);
