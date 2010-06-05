@@ -26,7 +26,7 @@ namespace Mood
         {
             InitializeComponent();
 
-            simpleOpenGlControl1.InitializeContexts();
+            bl_CameraPosition.InitializeContexts();
 
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             //Gl.glShadeModel(Gl.GL_FLAT);
@@ -89,6 +89,10 @@ namespace Mood
 
             resize();
 
+            this.lbl_CameraPosition.Text = "Camera Position: " + this.camera.getCameraEye();
+            this.lbl_CameraDirection.Text = "Camera Direction: " + this.camera.getCameraDirection();
+
+
             //Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             //Gl.glColor3f(1.0f, 1.0f, 1.0f);
             //Gl.glLoadIdentity();             /* clear the matrix */
@@ -141,7 +145,7 @@ namespace Mood
 
         public void resize()
         {
-            Gl.glViewport(0, 0, simpleOpenGlControl1.Width, simpleOpenGlControl1.Height);
+            Gl.glViewport(0, 0, bl_CameraPosition.Width, bl_CameraPosition.Height);
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             //Gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
@@ -157,41 +161,39 @@ namespace Mood
         {
             if (e.KeyCode == Keys.W)
             {
-                //perspective -= 1;
-                camera.MoveForwards(-0.1f);
-                simpleOpenGlControl1.Refresh();
+                camera.MoveFwBw(0.1);
+                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.S)
             {
-                //perspective += 1;
-                camera.MoveForwards(0.1f);
-                simpleOpenGlControl1.Refresh();
+                camera.MoveFwBw(-0.1);
+                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.A)
             {
-                camera.RotateY(5);
-                simpleOpenGlControl1.Refresh();
+                camera.RotateY(-0.1);
+                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.D)
             {
-                camera.RotateY(-5);
-                simpleOpenGlControl1.Refresh();
+                camera.RotateY(0.1);
+                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.PageUp)
             {
                 //x--;
                 //y++;
                 //this.rotation++;
-                camera.RotateX(5);
-                simpleOpenGlControl1.Refresh();
+                camera.RotateX(0.1);
+                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.PageDown)
             {
                 //x++;
                 //y--;
                 //this.rotation--;
-                camera.RotateX(-5);
-                simpleOpenGlControl1.Refresh();
+                camera.RotateX(-0.1);
+                bl_CameraPosition.Refresh();
             }
         }
 

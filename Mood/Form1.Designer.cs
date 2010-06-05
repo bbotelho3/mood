@@ -28,45 +28,74 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
+            this.bl_CameraPosition = new Tao.Platform.Windows.SimpleOpenGlControl();
+            this.lbl_CameraDirection = new System.Windows.Forms.Label();
+            this.lbl_CameraPosition = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // simpleOpenGlControl1
+            // bl_CameraPosition
             // 
-            this.simpleOpenGlControl1.AccumBits = ((byte)(0));
-            this.simpleOpenGlControl1.AutoCheckErrors = false;
-            this.simpleOpenGlControl1.AutoFinish = false;
-            this.simpleOpenGlControl1.AutoMakeCurrent = true;
-            this.simpleOpenGlControl1.AutoSwapBuffers = true;
-            this.simpleOpenGlControl1.BackColor = System.Drawing.Color.Black;
-            this.simpleOpenGlControl1.ColorBits = ((byte)(32));
-            this.simpleOpenGlControl1.DepthBits = ((byte)(16));
-            this.simpleOpenGlControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.simpleOpenGlControl1.Location = new System.Drawing.Point(0, 0);
-            this.simpleOpenGlControl1.Name = "simpleOpenGlControl1";
-            this.simpleOpenGlControl1.Size = new System.Drawing.Size(284, 264);
-            this.simpleOpenGlControl1.StencilBits = ((byte)(0));
-            this.simpleOpenGlControl1.TabIndex = 0;
-            this.simpleOpenGlControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
-            this.simpleOpenGlControl1.Resize += new System.EventHandler(this.simpleOpenGlControl1_Resize);
-            this.simpleOpenGlControl1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.simpleOpenGlControl1_KeyPress);
-            this.simpleOpenGlControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.simpleOpenGlControl1_KeyDown);
+            this.bl_CameraPosition.AccumBits = ((byte)(0));
+            this.bl_CameraPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.bl_CameraPosition.AutoCheckErrors = false;
+            this.bl_CameraPosition.AutoFinish = false;
+            this.bl_CameraPosition.AutoMakeCurrent = true;
+            this.bl_CameraPosition.AutoSwapBuffers = true;
+            this.bl_CameraPosition.BackColor = System.Drawing.Color.Black;
+            this.bl_CameraPosition.ColorBits = ((byte)(32));
+            this.bl_CameraPosition.DepthBits = ((byte)(16));
+            this.bl_CameraPosition.Location = new System.Drawing.Point(0, 0);
+            this.bl_CameraPosition.Name = "bl_CameraPosition";
+            this.bl_CameraPosition.Size = new System.Drawing.Size(375, 356);
+            this.bl_CameraPosition.StencilBits = ((byte)(0));
+            this.bl_CameraPosition.TabIndex = 0;
+            this.bl_CameraPosition.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
+            this.bl_CameraPosition.Resize += new System.EventHandler(this.simpleOpenGlControl1_Resize);
+            this.bl_CameraPosition.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.simpleOpenGlControl1_KeyPress);
+            this.bl_CameraPosition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.simpleOpenGlControl1_KeyDown);
+            // 
+            // lbl_CameraDirection
+            // 
+            this.lbl_CameraDirection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbl_CameraDirection.AutoSize = true;
+            this.lbl_CameraDirection.Location = new System.Drawing.Point(12, 376);
+            this.lbl_CameraDirection.Name = "lbl_CameraDirection";
+            this.lbl_CameraDirection.Size = new System.Drawing.Size(91, 13);
+            this.lbl_CameraDirection.TabIndex = 1;
+            this.lbl_CameraDirection.Text = "Camera Direction:";
+            // 
+            // lbl_CameraPosition
+            // 
+            this.lbl_CameraPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbl_CameraPosition.AutoSize = true;
+            this.lbl_CameraPosition.Location = new System.Drawing.Point(12, 359);
+            this.lbl_CameraPosition.Name = "lbl_CameraPosition";
+            this.lbl_CameraPosition.Size = new System.Drawing.Size(86, 13);
+            this.lbl_CameraPosition.TabIndex = 2;
+            this.lbl_CameraPosition.Text = "Camera Position:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 264);
-            this.Controls.Add(this.simpleOpenGlControl1);
+            this.ClientSize = new System.Drawing.Size(376, 398);
+            this.Controls.Add(this.lbl_CameraPosition);
+            this.Controls.Add(this.lbl_CameraDirection);
+            this.Controls.Add(this.bl_CameraPosition);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private Tao.Platform.Windows.SimpleOpenGlControl simpleOpenGlControl1;
+        private Tao.Platform.Windows.SimpleOpenGlControl bl_CameraPosition;
+        private System.Windows.Forms.Label lbl_CameraDirection;
+        private System.Windows.Forms.Label lbl_CameraPosition;
 
     }
 }
