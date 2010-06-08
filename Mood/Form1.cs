@@ -82,7 +82,7 @@ namespace Mood
                 Gl.glRotatef(90.0f, halfsize, 0.0f, 0.0f);
                 DrawNet(size, LinesX, LinesZ);
                 Gl.glTranslatef(0.0f, size, 0.0f);
-            DrawNet(size, LinesX, LinesZ);
+                DrawNet(size, LinesX, LinesZ);
             Gl.glPopMatrix();
 
             Gl.glFlush();

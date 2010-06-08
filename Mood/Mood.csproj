@@ -113,6 +113,7 @@
     <Content Include="Libraries\Tao.OpenGl.xml" />
     <Content Include="Libraries\Tao.Platform.Windows.dll" />
     <Content Include="Libraries\Tao.Platform.Windows.xml" />
+    <Content Include="Textures\Wall\brick1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
