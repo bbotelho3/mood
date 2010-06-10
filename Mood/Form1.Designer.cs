@@ -52,8 +52,8 @@
             this.bl_CameraPosition.StencilBits = ((byte)(0));
             this.bl_CameraPosition.TabIndex = 0;
             this.bl_CameraPosition.Paint += new System.Windows.Forms.PaintEventHandler(this.simpleOpenGlControl1_Paint);
+            this.bl_CameraPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bl_CameraPosition_MouseDown);
             this.bl_CameraPosition.Resize += new System.EventHandler(this.simpleOpenGlControl1_Resize);
-            this.bl_CameraPosition.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.simpleOpenGlControl1_KeyPress);
             this.bl_CameraPosition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.simpleOpenGlControl1_KeyDown);
             // 
             // lbl_CameraDirection

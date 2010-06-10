@@ -6,7 +6,6 @@ using Mood.GeoCalc;
 
 namespace Mood
 {
-
     public class Vector3d
     {
         #region fields
@@ -48,6 +47,11 @@ namespace Mood
         public override string ToString()
         {
             return String.Format("X: {0}, Y: {1}, Z: {2}", this.X, this.Y, this.Z);
+        }
+
+        public double DotProduct(Vector3d v)
+        {
+            return (X * Y * Z) + (v.X * v.Y * v.Z);
         }
 
         #endregion Public Methods

@@ -11,8 +11,8 @@ namespace Mood
     {
         private const float PIdiv180 = (float)Math.PI / 180;
 
-        private Vector3d cameraEye;
-        private Vector3d cameraDirection;
+        public Vector3d cameraEye;
+        public Vector3d cameraDirection;
         private Vector3d cameraUp;
 
         public Camera()
@@ -106,9 +106,9 @@ namespace Mood
 
         public void Render()
         {
-            Gl.glMatrixMode(Gl.GL_PROJECTION);
+            //Gl.glMatrixMode(Gl.GL_PROJECTION);
             Glu.gluLookAt(cameraEye.X, cameraEye.Y, cameraEye.Z, cameraDirection.X, cameraDirection.Y, cameraDirection.Z, cameraUp.X, cameraUp.Y, cameraUp.Z);
-            Gl.glMatrixMode(Gl.GL_MODELVIEW);
+            //Gl.glMatrixMode(Gl.GL_MODELVIEW);
         }
 
         private static Matrix rotationY(double angle)

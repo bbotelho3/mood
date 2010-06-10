@@ -14,13 +14,13 @@ namespace Mood
 {
     public partial class Form1 : Form
     {
-        int x = 1;
-        int y = 1;
-
         int perspective = 100;
-        int rotation = 0;
 
         Camera camera;
+
+        World world;
+
+        Player player;
 
         public Form1()
         {
@@ -29,197 +29,129 @@ namespace Mood
             bl_CameraPosition.InitializeContexts();
 
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            //Gl.glShadeModel(Gl.GL_FLAT);
             Glut.glutInit();
+
             camera = new Camera();
 
-            //Glut.glutInit(&argc, argv);
-            //Glut.glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-            //Glut.glutInitWindowSize(300, 300);
-            //Glut.glutCreateWindow("Camera");
-            //Camera.Move(F3dVector(0.0, 0.0, 3.0));
-            //Camera.MoveForwards(1.0);
-            //Glut.glutDisplayFunc(Display);
-            //Glut.glutReshapeFunc(reshape);
-            //Glut.glutKeyboardFunc(KeyDown);
-            //Glut.glutMainLoop();
+            SetProjection();
+
+            world = new World();
+
+            world.Objects.Add(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), Color.Red));
+            world.Objects.Add(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), Color.Red));
+            world.Objects.Add(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3)));
+            world.Objects.Add(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3)));
+
+            world.Objects.Add(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
+
+            //world.Objects.Add(new Line(new Vector3d(0, 0 ,0), new Vector3d(5, 0, 5)));
+
+            player = new Player();
         }
 
         private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
         {
-            //Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            //Gl.glClear(1);
+            Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
             Gl.glLoadIdentity();
+
             camera.Render();
-            Gl.glTranslatef(0.0f, 0.8f, 0.0f);
 
-            Gl.glScalef(3.0f, 1.0f, 3.0f);
+            //Gl.glTranslatef(0.0f, 0.8f, 0.0f);
+            //Gl.glScalef(3.0f, 1.0f, 3.0f);
 
-            float size = 2.0f;
-            int LinesX = 30;
-            int LinesZ = 30;
-
-            float halfsize = size / 2.0f;
-            Gl.glColor3f(1.0f, 1.0f, 1.0f);
-            Gl.glPushMatrix();
-                Gl.glTranslatef(0.0f, -halfsize, 0.0f);
-                DrawNet(size, LinesX, LinesZ);
-                Gl.glTranslatef(0.0f, size, 0.0f);
-                DrawNet(size, LinesX, LinesZ);
-            Gl.glPopMatrix();
-            Gl.glColor3f(0.0f, 0.0f, 1.0f);
-            Gl.glPushMatrix();
-                Gl.glTranslatef(-halfsize, 0.0f, 0.0f);
-                Gl.glRotatef(90.0f, 0.0f, 0.0f, halfsize);
-                DrawNet(size, LinesX, LinesZ);
-                Gl.glTranslatef(0.0f, -size, 0.0f);
-                DrawNet(size, LinesX, LinesZ);
-            Gl.glPopMatrix();
-            Gl.glColor3f(1.0f, 0.0f, 0.0f);
-            Gl.glPushMatrix();
-                Gl.glTranslatef(0.0f, 0.0f, -halfsize);
-                Gl.glRotatef(90.0f, halfsize, 0.0f, 0.0f);
-                DrawNet(size, LinesX, LinesZ);
-                Gl.glTranslatef(0.0f, size, 0.0f);
-                DrawNet(size, LinesX, LinesZ);
-            Gl.glPopMatrix();
+            foreach (WorldObject obj in world.Objects)
+            {
+                obj.Draw();
+            }
 
             Gl.glFlush();
 
-            resize();
+            SetProjection();
 
             this.lbl_CameraPosition.Text = "Camera Position: " + this.camera.getCameraEye();
             this.lbl_CameraDirection.Text = "Camera Direction: " + this.camera.getCameraDirection();
-
-
-            //Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
-            //Gl.glColor3f(1.0f, 1.0f, 1.0f);
-            //Gl.glLoadIdentity();             /* clear the matrix */
-            ///* viewing transformation  */
-
-            //camera.Render();
-            //Glu.gluLookAt(x, y, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            ////Gl.glRotatef(rotation, 0, 1, 0);
-            //Gl.glScalef(1.0f, 1.0f, 1.0f);      /* modeling transformation */
-            
-            //Gl.glTranslatef(0, 2f, 0);
-
-            ////Glut.glutWireCube(1.0f);
-
-            ////Glut.glutSolidTeapot(1.0f);
-            //Gl.glLoadIdentity();
-            ////Glu.gluLookAt(x, y, 2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-            //Gl.glColor3f(1.0f, 0, 0);
-            //Gl.glScalef(5.0f, 5.0f, 5.0f);
-
-            //Gl.glBegin(Gl.GL_QUADS);
-            //{
-            //    Gl.glVertex3f(0.0f, 0.0f, 0.0f);
-            //    Gl.glVertex3f(-1.0f, 0f, 0f);
-            //    Gl.glVertex3f(-1.0f, 0f, -1.0f);
-            //    Gl.glVertex3f(0f, 0f, -1f);
-            //}
-            //Gl.glEnd();
-
-            //Gl.glColor3f(0f, 1, 0);
-
-            //Gl.glBegin(Gl.GL_QUADS);
-            //{
-            //    Gl.glVertex3f(0.0f, 0.0f, 0.0f);
-            //    Gl.glVertex3f(1.0f, 0f, 0f);
-            //    Gl.glVertex3f(1.0f, 0f, -1.0f);
-            //    Gl.glVertex3f(0f, 0f, -1f);
-            //}
-            //Gl.glEnd();
-
-            //Gl.glFlush();
-
-            //resize();
         }
 
         private void simpleOpenGlControl1_Resize(object sender, EventArgs e)
         {
-            resize();
+            SetProjection();
         }
 
-        public void resize()
+        public void SetProjection()
         {
-            Gl.glViewport(0, 0, bl_CameraPosition.Width, bl_CameraPosition.Height);
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             //Gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
             Glu.gluPerspective(perspective, 1.0, 0.0, 20.0);
-            Gl.glMatrixMode(Gl.GL_MODELVIEW);
-        }
-
-        private void simpleOpenGlControl1_KeyPress(object sender, KeyPressEventArgs e)
-        {
+            Gl.glViewport(0, 0, bl_CameraPosition.Width, bl_CameraPosition.Height);
         }
 
         private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
         {
+            Vector3d lastPosition = new Vector3d(camera.getCameraEye().X, camera.getCameraEye().Y, camera.getCameraEye().Z);
+            Vector3d lastDirection = new Vector3d(camera.getCameraDirection().X, camera.getCameraDirection().Y, camera.getCameraDirection().Z);
+
             if (e.KeyCode == Keys.W)
             {
                 camera.MoveFwBw(0.1);
-                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.S)
             {
                 camera.MoveFwBw(-0.1);
-                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.A)
             {
                 camera.RotateY(-0.1);
-                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.D)
             {
                 camera.RotateY(0.1);
-                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.PageUp)
             {
-                //x--;
-                //y++;
-                //this.rotation++;
                 camera.RotateX(0.1);
-                bl_CameraPosition.Refresh();
             }
             if (e.KeyCode == Keys.PageDown)
             {
-                //x++;
-                //y--;
-                //this.rotation--;
                 camera.RotateX(-0.1);
-                bl_CameraPosition.Refresh();
             }
+
+            player.Position = camera.getCameraEye();
+
+            WorldObject obj = world.HitTest(player);
+
+            if (obj != null)
+            {
+                MessageBox.Show("HIT");
+
+                if (obj is IMoveable)
+                {
+                    IMoveable objmv = obj as IMoveable;
+
+                    Vector3d oldPosition = new Vector3d(objmv.GetPosition().X,objmv.GetPosition().Y,objmv.GetPosition().Z);
+
+                    objmv.Move(camera.cameraDirection);
+
+                    if (world.HitTest(objmv) != null)
+                    {
+                        objmv.SetPosition(oldPosition);
+                        MessageBox.Show("SPHERE HIT");
+                    }
+                }
+
+                camera.cameraEye = lastPosition;
+                camera.cameraDirection = lastDirection;
+            }
+
+            bl_CameraPosition.Refresh();
         }
 
-        private void DrawNet(float size, int LinesX, int LinesZ)
+        private void bl_CameraPosition_MouseDown(object sender, MouseEventArgs e)
         {
-            Gl.glBegin(Gl.GL_LINES);
-            for (int xc = 0; xc < LinesX; xc++)
-            {
-                Gl.glVertex3f(-size / 2.0f + xc / (LinesX - 1) * size,
-                            0.0f,
-                            size / 2.0f);
-                Gl.glVertex3f(-size / 2.0f + xc / (LinesX - 1) * size,
-                            0.0f,
-                            size / -2.0f);
-            }
-            for (int zc = 0; zc < LinesX; zc++)
-            {
-                Gl.glVertex3f(size / 2.0f,
-                            0.0f,
-                            -size / 2.0f + zc / (LinesZ - 1) * size);
-                Gl.glVertex3f(size / -2.0f,
-                            0.0f,
-                            -size / 2.0f + zc / (LinesZ - 1) * size);
-            }
-            Gl.glEnd();
-        }
+            world.Objects.Add(new Line(camera.cameraEye, camera.cameraDirection + new Vector3d(5, 0 ,5), Color.Blue));
 
+            bl_CameraPosition.Refresh();
+        }
     }
 }
