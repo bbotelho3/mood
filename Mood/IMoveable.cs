@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mood
+﻿namespace Mood
 {
     public interface IMoveable
     {
+        void Move(Vector3d direction);
+        
         Vector3d GetPosition();
 
         void SetPosition(Vector3d position);
-
-        void Move(Vector3d direction);
     }
 }

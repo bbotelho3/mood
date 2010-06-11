@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mood.GeoCalc;
 
 namespace Mood
@@ -28,6 +25,13 @@ namespace Mood
             this.X = X;
             this.Y = Y;
             this.Z = Z;
+        }
+
+        public Vector3d(Vector3d v)
+        {
+            this.X = v.X;
+            this.Y = v.Y;
+            this.Z = v.Z;
         }
 
         #endregion Constructors

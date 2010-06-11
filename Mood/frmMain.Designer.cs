@@ -1,6 +1,6 @@
 ﻿namespace Mood
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -76,7 +76,7 @@
             this.lbl_CameraPosition.TabIndex = 2;
             this.lbl_CameraPosition.Text = "Camera Position:";
             // 
-            // Form1
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -84,8 +84,8 @@
             this.Controls.Add(this.lbl_CameraPosition);
             this.Controls.Add(this.lbl_CameraDirection);
             this.Controls.Add(this.bl_CameraPosition);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "frmMain";
+            this.Text = "Mood";
             this.ResumeLayout(false);
             this.PerformLayout();
 

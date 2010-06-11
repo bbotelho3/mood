@@ -1,22 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Mood
 {
     class World
     {
-        public List<WorldObject> Objects { get; set; }
+        public List<WorldObject> Objects { get; private set; }
+
+        public List<IHitable> HitableObjects { get; private set; }
+
+        public List<IShootable> ShootableObjects { get; private set; }
+
+        public bool ShowLaser { get; set; }
+
+        public Laser lastLaser;
+
+        public void AddObject(WorldObject obj)
+        {
+            Objects.Add(obj);
+
+            if (obj is IHitable)
+            {
+                HitableObjects.Add(obj as IHitable);
+            }
+
+            if (obj is IShootable)
+            {
+                ShootableObjects.Add(obj as IShootable);
+            }
+
+            if (obj is Laser)
+                lastLaser = obj as Laser;
+        }
 
         public World()
         {
             Objects = new List<WorldObject>();
+            HitableObjects = new List<IHitable>();
+            ShootableObjects = new List<IShootable>();
+            ShowLaser = true;
+            lastLaser = null;
         }
 
-        public WorldObject HitTest(IMoveable mvObj)
+        public IHitable HitTest(IMoveable mvObj)
         {
-            foreach (WorldObject obj in Objects)
+            foreach (IHitable obj in HitableObjects)
             {
                 if (obj != mvObj && obj.HitTest(mvObj))
                 {
@@ -25,6 +52,37 @@ namespace Mood
             }
 
             return null;
+        }
+
+        public void ShootTest(Laser line)
+        {
+            List<IShootable> Shot = new List<IShootable>();
+
+            foreach (IShootable obj in ShootableObjects)
+            {
+                if (obj.ShootTest(line))
+                {
+                    Shot.Add(obj);
+
+                    obj.Die();
+                }
+            }
+
+            foreach (IShootable dead in Shot)
+            {
+                ShootableObjects.Remove(dead);
+            }
+        }
+
+        public void Draw()
+        {
+            foreach (WorldObject obj in Objects)
+            {
+                if (obj is Laser && !ShowLaser && lastLaser != obj)
+                    continue;
+                
+                obj.Draw();
+            }
         }
     }
 }

@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Tao.Platform.Windows;
-using Tao.OpenGl;
 using Tao.FreeGlut;
+using Tao.OpenGl;
+using System.Resources;
 
 namespace Mood
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         int perspective = 100;
 
@@ -22,7 +17,9 @@ namespace Mood
 
         Player player;
 
-        public Form1()
+        int textcont = 1;
+
+        public frmMain()
         {
             InitializeComponent();
 
@@ -30,6 +27,8 @@ namespace Mood
 
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             Glut.glutInit();
+            Gl.glEnable(Gl.GL_TEXTURE_2D);
+            //Gl.glEnable(Gl.GL_DEPTH_TEST);
 
             camera = new Camera();
 
@@ -37,14 +36,16 @@ namespace Mood
 
             world = new World();
 
-            world.Objects.Add(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), Color.Red));
-            world.Objects.Add(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), Color.Red));
-            world.Objects.Add(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3)));
-            world.Objects.Add(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3)));
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), Color.Red));
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), Color.Red));
+            
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3)));
 
-            world.Objects.Add(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), new Texture(Properties.Resources.brick1, textcont++)));
 
-            //world.Objects.Add(new Line(new Vector3d(0, 0 ,0), new Vector3d(5, 0, 5)));
+            world.AddObject(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
+
+            world.AddObject(new Weapon(camera.cameraEye, camera.cameraDirection));
 
             player = new Player();
         }
@@ -60,10 +61,7 @@ namespace Mood
             //Gl.glTranslatef(0.0f, 0.8f, 0.0f);
             //Gl.glScalef(3.0f, 1.0f, 3.0f);
 
-            foreach (WorldObject obj in world.Objects)
-            {
-                obj.Draw();
-            }
+            world.Draw();
 
             Gl.glFlush();
 
@@ -96,47 +94,63 @@ namespace Mood
             {
                 camera.MoveFwBw(0.1);
             }
+
             if (e.KeyCode == Keys.S)
             {
                 camera.MoveFwBw(-0.1);
             }
+
             if (e.KeyCode == Keys.A)
             {
                 camera.RotateY(-0.1);
             }
+
             if (e.KeyCode == Keys.D)
             {
                 camera.RotateY(0.1);
             }
+
             if (e.KeyCode == Keys.PageUp)
             {
                 camera.RotateX(0.1);
             }
+
             if (e.KeyCode == Keys.PageDown)
             {
                 camera.RotateX(-0.1);
             }
 
+            if (e.KeyCode == Keys.P)
+            {
+                SpawnSphere();
+            }
+
+            if (e.KeyCode == Keys.L)
+            {
+                world.ShowLaser = !world.ShowLaser;
+            }
+
             player.Position = camera.getCameraEye();
 
-            WorldObject obj = world.HitTest(player);
+            IHitable obj = world.HitTest(player);
 
             if (obj != null)
             {
-                MessageBox.Show("HIT");
+                //MessageBox.Show("HIT");
 
                 if (obj is IMoveable)
                 {
                     IMoveable objmv = obj as IMoveable;
 
-                    Vector3d oldPosition = new Vector3d(objmv.GetPosition().X,objmv.GetPosition().Y,objmv.GetPosition().Z);
+                    Vector3d oldPosition = new Vector3d(objmv.GetPosition().X, objmv.GetPosition().Y, objmv.GetPosition().Z);
 
                     objmv.Move(camera.cameraDirection);
 
                     if (world.HitTest(objmv) != null)
                     {
                         objmv.SetPosition(oldPosition);
-                        MessageBox.Show("SPHERE HIT");
+
+                        //MessageBox.Show("SPHERE HIT");
                     }
                 }
 
@@ -149,9 +163,20 @@ namespace Mood
 
         private void bl_CameraPosition_MouseDown(object sender, MouseEventArgs e)
         {
-            world.Objects.Add(new Line(camera.cameraEye, camera.cameraDirection + new Vector3d(5, 0 ,5), Color.Blue));
+            Laser laser = new Laser(new Vector3d(camera.cameraEye), new Vector3d(camera.cameraDirection), Color.Blue);
+
+            world.AddObject(laser);
+
+            world.ShootTest(laser);
 
             bl_CameraPosition.Refresh();
+        }
+
+        private void SpawnSphere()
+        {
+            Random random = new Random();
+
+            world.AddObject(new Sphere(new Vector3d((float)random.NextDouble() * 6f - 3f, -0.8f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue));
         }
     }
 }

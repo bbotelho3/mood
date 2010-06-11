@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace Mood
 {
-    class Sphere : WorldObject, IMoveable
+    class Sphere : WorldObject, IMoveable, IHitable, IShootable
     {
         public Vector3d Center;
         private Color color;
@@ -21,7 +21,7 @@ namespace Mood
             this.color = color;
         }
 
-        public override bool HitTest(IMoveable obj)
+        public bool HitTest(IMoveable obj)
         {
             Vector3d a = new Vector3d(Center.X + (float)radius, Center.Y + (float)radius, Center.Z + (float)radius);
             Vector3d b = new Vector3d(Center.X - (float)radius, Center.Y - (float)radius, Center.Z - (float)radius);
@@ -73,6 +73,18 @@ namespace Mood
             Center.X += vector.X * (float)step;
             //cameraEye.Y += vector.Y * (float)step;
             Center.Z += vector.Z * (float)step;
+        }
+
+        public bool ShootTest(Laser laser)
+        {
+            double dist = Geometry.linePointDist(laser.A, laser.B, Center, true);
+
+            return dist < radius;
+        }
+
+        public void Die()
+        {
+            color = Color.White;
         }
     }
 }
