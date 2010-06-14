@@ -64,14 +64,15 @@ namespace Mood
         {
             Gl.glPushMatrix();
             Gl.glBindTexture(Gl.GL_TEXTURE_2D, texture.id);
+            Gl.glColor3f(Color.White.R, Color.White.G, Color.White.B);
             Gl.glBegin(Gl.GL_QUADS);
-            Gl.glTexCoord3f(A.X, A.Y, A.Z);
+            Gl.glTexCoord2f(0, 0);
             Gl.glVertex3f(A.X, A.Y, A.Z);
-            Gl.glTexCoord3f(B.X, B.Y, B.Z);
+            Gl.glTexCoord2f(0, 1);
             Gl.glVertex3f(B.X, B.Y, B.Z);
-            Gl.glTexCoord3f(C.X, C.Y, C.Z);
+            Gl.glTexCoord2f(1, 1);
             Gl.glVertex3f(C.X, C.Y, C.Z);
-            Gl.glTexCoord3f(D.X, D.Y, D.Z);
+            Gl.glTexCoord2f(1, 0);
             Gl.glVertex3f(D.X, D.Y, D.Z);
             Gl.glEnd();
             Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);

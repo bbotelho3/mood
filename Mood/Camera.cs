@@ -99,9 +99,9 @@ namespace Mood
 
         public void RotateX(double angle)
         {
-            //Vector3d ray = cameraDirection - cameraEye;
-            //cameraDirection.Y = (float)(Math.Cos(angle) * ray.Y + Math.Sin(angle) * ray.Z);
-            //cameraDirection.Z = (float)(-Math.Sin(angle) * ray.Y + Math.Cos(angle) * ray.Z);
+            Vector3d ray = cameraDirection - cameraEye;
+            cameraDirection.Y = cameraEye.Y + (float)(Math.Cos(angle) * ray.Y + Math.Sin(angle) * ray.Z);
+            cameraDirection.Z = cameraEye.Z + (float)(-Math.Sin(angle) * ray.Y + Math.Cos(angle) * ray.Z);
         }
 
         public void Render()

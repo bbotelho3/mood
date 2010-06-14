@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B12D67B6-3582-4C1A-9F1D-7221B95B153C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -120,6 +120,7 @@
     <Content Include="Libraries\Tao.Platform.Windows.xml" />
     <None Include="Resources\Image1.jpg" />
     <Content Include="Textures\Wall\brick1.jpg" />
+    <Content Include="Textures\Wall\Dock.jpg" />
     <None Include="Textures\Wall\weap.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

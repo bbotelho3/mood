@@ -19,6 +19,8 @@ namespace Mood
 
         int textcont = 1;
 
+        Weapon weapon;
+
         public frmMain()
         {
             InitializeComponent();
@@ -36,16 +38,20 @@ namespace Mood
 
             world = new World();
 
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), Color.Red));
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), Color.Red));
-            
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3)));
+            Texture texture = new Texture(Properties.Resources.brick1, textcont++);
 
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), new Texture(Properties.Resources.brick1, textcont++)));
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Properties.Resources.Dock, textcont++)));
+
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), texture));
+
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
 
             world.AddObject(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
 
-            world.AddObject(new Weapon(camera.cameraEye, camera.cameraDirection));
+            weapon = new Weapon(camera.cameraEye, camera.cameraDirection);//, new Texture(Properties.Resources.weap, textcont++));
+
+            world.AddObject(weapon);
 
             player = new Player();
         }
@@ -130,6 +136,17 @@ namespace Mood
                 world.ShowLaser = !world.ShowLaser;
             }
 
+            if (e.KeyCode == Keys.Space)
+            {
+                Laser laser = new Laser(new Vector3d(camera.cameraEye), new Vector3d(camera.cameraDirection), Color.Blue);
+
+                world.AddObject(laser);
+
+                world.ShootTest(laser);
+
+                bl_CameraPosition.Refresh();    
+            }
+
             player.Position = camera.getCameraEye();
 
             IHitable obj = world.HitTest(player);
@@ -156,6 +173,9 @@ namespace Mood
 
                 camera.cameraEye = lastPosition;
                 camera.cameraDirection = lastDirection;
+
+                weapon.A = camera.cameraEye;
+                weapon.B = camera.cameraDirection;
             }
 
             bl_CameraPosition.Refresh();

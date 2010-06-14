@@ -57,13 +57,13 @@ namespace Mood
                 Gl.glGenTextures(textcont, out id);
 
                 //// Create Nearest Filtered Texture
-                //Gl.glBindTexture(Gl.GL_TEXTURE_2D, this.texture[0]);
+                //Gl.glBindTexture(Gl.GL_TEXTURE_2D, id);
                 //Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_NEAREST);
                 //Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_NEAREST);
                 //Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, (int)Gl.GL_RGB, image.Width, image.Height, 0, Gl.GL_BGR_EXT, Gl.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
 
                 //// Create Linear Filtered Texture
-                //Gl.glBindTexture(Gl.GL_TEXTURE_2D, this.texture[1]);
+                //Gl.glBindTexture(Gl.GL_TEXTURE_2D, id);
                 //Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
                 //Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
                 //Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, (int)Gl.GL_RGB, image.Width, image.Height, 0, Gl.GL_BGR_EXT, Gl.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
@@ -75,7 +75,6 @@ namespace Mood
                 Glu.gluBuild2DMipmaps(Gl.GL_TEXTURE_2D, (int)Gl.GL_RGB, image.Width, image.Height, Gl.GL_BGR_EXT, Gl.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
                 
                 image.UnlockBits(bitmapdata);
-                image.Dispose();
                 return true;
             }
             return false;

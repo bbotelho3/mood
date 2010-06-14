@@ -17,7 +17,7 @@ namespace Mood
             A = a;
             B = b;
 
-            float step = 2f;
+            float step = 20f;
 
             Vector3d vector = B - A;
 
