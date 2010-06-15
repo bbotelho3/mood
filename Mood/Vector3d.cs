@@ -76,6 +76,19 @@ namespace Mood
                                 v1.Z + v2.Z);
         }
 
+        public static Vector3d operator *(Vector3d v1, Matrix m1)
+        {
+            Matrix mResult = v1.toMatrix() * m1;
+            double[,] result = mResult.GetMatrix();
+
+            if (result.GetLength(1) < 3)
+            {
+                throw new MatrixSizeException();
+            }
+
+            return new Vector3d((float)result[0, 0], (float)result[0, 1], (float)result[0, 2]);       
+        }
+
         public static Vector3d Convert(Matrix m)
         {
             double[,] matrix = m.GetMatrix();
