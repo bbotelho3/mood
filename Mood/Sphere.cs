@@ -1,44 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tao.OpenGl;
+﻿using System.Drawing;
 using Tao.FreeGlut;
-using System.Drawing;
+using Tao.OpenGl;
 
 namespace Mood
 {
     class Sphere : WorldObject, IMoveable, IHitable, IShootable
     {
-        public Vector3d Center;
-        private Color color;
+        private Vector3d center;
         private double radius;
+        private Color color;
+
+        public double LastShootDistance { get; set; }
 
         public Sphere(Vector3d center, double radius, Color color)
         {
-            Center = center;
+            this.center = center;
             this.radius = radius;
             this.color = color;
+            
+            IsDead = false;
+
+            LastShootDistance = 100d;
         }
 
         public bool HitTest(IMoveable obj)
         {
-            Vector3d a = new Vector3d(Center.X + (float)radius, Center.Y + (float)radius, Center.Z + (float)radius);
-            Vector3d b = new Vector3d(Center.X - (float)radius, Center.Y - (float)radius, Center.Z - (float)radius);
+            Vector3d a = new Vector3d(center.X + (float)radius, center.Y + (float)radius, center.Z + (float)radius);
+            Vector3d b = new Vector3d(center.X - (float)radius, center.Y - (float)radius, center.Z - (float)radius);
 
-            double dist = Geometry.linePointDist(a, b, obj.GetPosition(), true);
+            double dist = Geometry.LinePointDistance(a, b, obj.GetPosition(), true);
 
-            if (dist < 0.1d)
+            if (dist < 0.2d)
             {
                 return true;
             }
 
-            a = new Vector3d(Center.X + (float)radius, Center.Y + (float)radius, Center.Z - (float)radius);
-            b = new Vector3d(Center.X - (float)radius, Center.Y + (float)radius, Center.Z + (float)radius);
+            a = new Vector3d(center.X + (float)radius, center.Y + (float)radius, center.Z - (float)radius);
+            b = new Vector3d(center.X - (float)radius, center.Y + (float)radius, center.Z + (float)radius);
 
-            dist = Geometry.linePointDist(a, b, obj.GetPosition(), true);
+            dist = Geometry.LinePointDistance(a, b, obj.GetPosition(), true);
 
-            if (dist < 0.1d)
+            if (dist < 0.2d)
             {
                 return true;
             }
@@ -48,19 +50,24 @@ namespace Mood
 
         public Vector3d GetPosition()
         {
-            return Center;
+            return center;
         }
 
         public void SetPosition(Vector3d position)
         {
-            Center = position;
+            center = position;
+        }
+
+        public Vector3d LastPosition()
+        {
+            return center;
         }
 
         public override void Draw()
         {
             Gl.glPushMatrix();
-            Gl.glColor3f(color.R, color.G, color.B);
-            Gl.glTranslatef(Center.X, Center.Y, Center.Z);
+            Gl.glColor4f(color.R, color.G, color.B, (float)(color.A / 255f));
+            Gl.glTranslatef(center.X, center.Y, center.Z);
             Glut.glutSolidSphere(radius, 20, 20);
             Gl.glPopMatrix();
         }
@@ -69,22 +76,26 @@ namespace Mood
         {
             float step = 0.5f;
 
-            Vector3d vector = direction - Center;
-            Center.X += vector.X * (float)step;
-            //cameraEye.Y += vector.Y * (float)step;
-            Center.Z += vector.Z * (float)step;
+            center.X += direction.X * (float)step;
+            center.Z += direction.Z * (float)step;
         }
 
         public bool ShootTest(Laser laser)
         {
-            double dist = Geometry.linePointDist(laser.A, laser.B, Center, true);
+            double dist = Geometry.LinePointDistance(laser.A, laser.B, center, true);
+
+            LastShootDistance = dist;
 
             return dist < radius;
         }
 
         public void Die()
         {
-            color = Color.White;
+            color = Color.FromArgb((int)(255 * 0.2f), color.R, color.G, color.B);
+
+            IsDead = true;
         }
+
+        public bool IsDead { get; set; }
     }
 }

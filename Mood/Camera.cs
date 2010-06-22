@@ -31,12 +31,17 @@ namespace Mood
 
         public virtual void MoveFwBw(double step)
         {
-            Vector3d vector = cameraDirection - cameraEye;
+            double angleY = this.rotatedYAngle * PIdiv180;
+
+            Vector3d trans = firstCameraDirection * rotationY(angleY);
+            Vector3d dir = cameraEye + trans;
+
+            Vector3d vector = dir - cameraEye;
             cameraEye.X += vector.X * (float)step;
             cameraEye.Y += vector.Y * (float)step;
             cameraEye.Z += vector.Z * (float)step;
             cameraDirection.X += vector.X * (float)step;
-            cameraDirection.Y+= vector.Y * (float)step;
+            cameraDirection.Y += vector.Y * (float)step;
             cameraDirection.Z += vector.Z * (float)step;
         }
 
@@ -62,6 +67,7 @@ namespace Mood
             double angleX = this.rotatedXAngle * PIdiv180;
 
             Vector3d trans = firstCameraDirection * (rotationX(angleX) * rotationY(angleY));
+
             cameraDirection = cameraEye + trans;
 
             //Gl.glMatrixMode(Gl.GL_PROJECTION);

@@ -3,7 +3,7 @@ using Tao.OpenGl;
 
 namespace Mood
 {
-    public class Wall : WorldObject, IHitable
+    public class Floor : WorldObject
     {
         public Vector3d A { get; set; }
         public Vector3d B { get; set; }
@@ -16,7 +16,7 @@ namespace Mood
 
         private Texture texture;
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d)
+        public Floor(Vector3d a, Vector3d b, Vector3d c, Vector3d d)
         {
             A = a;
             B = b;
@@ -28,13 +28,13 @@ namespace Mood
             color = Color.White;
         }
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Color color)
+        public Floor(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Color color)
             : this(a, b, c, d)
         {
             this.color = color;
         }
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Texture texture)
+        public Floor(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Texture texture)
             : this(a, b, c, d)
         {
             this.texture = texture;

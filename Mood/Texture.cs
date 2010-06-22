@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using Tao.OpenGl;
-using System.IO;
-using System.Drawing.Imaging;
 
 namespace Mood
 {
@@ -15,25 +9,25 @@ namespace Mood
 
         public int id;
 
-        public Texture(string path, int textcont)
+        public Texture(string path)
         {
             //Gl.glGenTextures(textcont, out id);
 
             bitmap = (Bitmap)Image.FromFile(path);
 
-            LoadTextures(textcont);
+            LoadTextures();
         }
 
-        public Texture(Bitmap bitmap, int textcont)
+        public Texture(Bitmap bitmap)
         {
             //Gl.glGenTextures(textcont, out id);
 
             this.bitmap = bitmap;
 
-            LoadTextures(textcont);
+            LoadTextures();
         }
 
-        protected bool LoadTextures(int textcont)
+        protected bool LoadTextures()
         {
             Bitmap image = null;
             try
@@ -54,7 +48,7 @@ namespace Mood
 
                 bitmapdata = image.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-                Gl.glGenTextures(textcont, out id);
+                Gl.glGenTextures(1, out id);
 
                 //// Create Nearest Filtered Texture
                 //Gl.glBindTexture(Gl.GL_TEXTURE_2D, id);
@@ -73,25 +67,12 @@ namespace Mood
                 Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
                 Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR_MIPMAP_NEAREST);
                 Glu.gluBuild2DMipmaps(Gl.GL_TEXTURE_2D, (int)Gl.GL_RGB, image.Width, image.Height, Gl.GL_BGR_EXT, Gl.GL_UNSIGNED_BYTE, bitmapdata.Scan0);
-                
+
                 image.UnlockBits(bitmapdata);
+                image.Dispose();
                 return true;
             }
             return false;
-        }
-
-        private byte[] BmpToBytes_MemStream(Bitmap bmp)
-        {
-            MemoryStream ms = new MemoryStream();
-            // Save to memory using the Jpeg format
-            bmp.Save(ms, ImageFormat.Jpeg);
-
-            // read to end
-            byte[] bmpBytes = ms.GetBuffer();
-            bmp.Dispose();
-            ms.Close();
-
-            return bmpBytes;
         }
     }
 }

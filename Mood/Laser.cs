@@ -8,24 +8,16 @@ namespace Mood
     {
         public Vector3d A;
         public Vector3d B;
-        private Color color;
 
-        public float height;
+        private Color color;
+        private float height;
 
         public Laser(Vector3d a, Vector3d b)
         {
             A = a;
             B = b;
 
-            float step = 20f;
-
-            Vector3d vector = B - A;
-
-            //A.X += vector.X * (float)step;
-            //A.Z += vector.Z * (float)step;
-
-            B.X += vector.X * (float)step;
-            B.Z += vector.Z * (float)step;
+            SetRange(20f);
 
             color = Color.White;
 
@@ -38,22 +30,23 @@ namespace Mood
             this.color = color;
         }
 
+        public void SetRange(float range)
+        {
+            Vector3d vector = B - A;
+
+            //A.X += vector.X * (float)step;
+            //A.Z += vector.Z * (float)step;
+
+            B.X += vector.X * range;
+            B.Y += vector.Y * range;
+            B.Z += vector.Z * range;
+        }
+
         public override void Draw()
         {
-            //Gl.glPushMatrix();
-            //Gl.glColor3f(color.R, color.G, color.B);
-            //Gl.glBegin(Gl.GL_LINES);
-            //Gl.glVertex3f(A.X, A.Y, A.Z);
-            //Gl.glVertex3f(B.X, B.Y, B.Z);
-            //Gl.glEnd();
-            //Gl.glPopMatrix();
-
-
             DrawLine(A.X, A.Z, B.X, B.Z, 0.01f, 0.02f);
         }
 
-        // Draws a line between (x1,y1) - (x2,y2) with a start thickness of t1 and
-        // end thickness t2.
         void DrawLine(float x1, float y1, float x2, float y2, float t1, float t2)
         {
             float angle = (float)Math.Atan2(y2 - y1, x2 - x1);

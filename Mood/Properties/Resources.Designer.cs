@@ -74,6 +74,13 @@ namespace Mood.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Pistol {
+            get {
+                object obj = ResourceManager.GetObject("Pistol", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap weap {
             get {
                 object obj = ResourceManager.GetObject("weap", resourceCulture);

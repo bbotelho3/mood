@@ -1,62 +1,53 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Mood.Properties;
 using Tao.FreeGlut;
 using Tao.OpenGl;
-using System.Resources;
 
 namespace Mood
 {
     public partial class frmMain : Form
     {
-        int perspective = 100;
-
-        FPSCamera camera;
-
-        World world;
-
-        Player player;
-
-        int textcont = 1;
-
-        Weapon weapon;
+        private Camera camera;
+        private World world;
+        private Player player;
+        private Weapon weapon;
 
         public frmMain()
         {
             InitializeComponent();
 
-            bl_CameraPosition.InitializeContexts();
+            ogl.InitializeContexts();
 
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             Glut.glutInit();
             Gl.glEnable(Gl.GL_TEXTURE_2D);
-            //Gl.glEnable(Gl.GL_DEPTH_TEST);
-
-            camera = new FPSCamera();
-
-            SetProjection();
+            Gl.glEnable(Gl.GL_BLEND);
+            Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
             world = new World();
 
-            Texture texture = new Texture(Properties.Resources.brick1, textcont++);
+            Texture texture = new Texture(Resources.brick1);
 
             world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Properties.Resources.Dock, textcont++)));
-
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Resources.Dock)));
             world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), texture));
-
             world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
-
+            world.AddObject(new Floor(new Vector3d(-3, -1, -3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), texture));
+            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), new Vector3d(3, -1, 3), new Vector3d(3, -1, 0), texture));
+            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), new Vector3d(3, -1, -3), new Vector3d(3, -1, 0), texture));
+            world.AddObject(new Floor(new Vector3d(-3, -1, 3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), texture));
             world.AddObject(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
 
-            weapon = new Weapon(camera.cameraEye, camera.cameraDirection);//, new Texture(Properties.Resources.weap, textcont++));
-
-            world.AddObject(weapon);
-
+            weapon = new Weapon();
             player = new Player();
+            camera = new Camera();
+
+            SetProjection();
         }
 
-        private void simpleOpenGlControl1_Paint(object sender, PaintEventArgs e)
+        private void ogl_Paint(object sender, PaintEventArgs e)
         {
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
@@ -64,10 +55,9 @@ namespace Mood
 
             camera.Render();
 
-            //Gl.glTranslatef(0.0f, 0.8f, 0.0f);
-            //Gl.glScalef(3.0f, 1.0f, 3.0f);
-
             world.Draw();
+
+            weapon.Draw(this.Width, this.Height);
 
             Gl.glFlush();
 
@@ -77,7 +67,7 @@ namespace Mood
             this.lbl_CameraDirection.Text = "Camera Direction: " + this.camera.getCameraDirection();
         }
 
-        private void simpleOpenGlControl1_Resize(object sender, EventArgs e)
+        private void ogl_Resize(object sender, EventArgs e)
         {
             SetProjection();
         }
@@ -87,11 +77,11 @@ namespace Mood
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             //Gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
-            Glu.gluPerspective(perspective, 1.0, 0.0, 20.0);
-            Gl.glViewport(0, 0, bl_CameraPosition.Width, bl_CameraPosition.Height);
+            Glu.gluPerspective(100, 1.0, 0.0, 20.0);
+            Gl.glViewport(0, 0, ogl.Width, ogl.Height);
         }
 
-        private void simpleOpenGlControl1_KeyDown(object sender, KeyEventArgs e)
+        private void ogl_KeyDown(object sender, KeyEventArgs e)
         {
             Vector3d lastPosition = new Vector3d(camera.getCameraEye().X, camera.getCameraEye().Y, camera.getCameraEye().Z);
             Vector3d lastDirection = new Vector3d(camera.getCameraDirection().X, camera.getCameraDirection().Y, camera.getCameraDirection().Z);
@@ -128,12 +118,12 @@ namespace Mood
 
             if (e.KeyCode == Keys.P)
             {
-                SpawnSphere();
+                world.AddSphere();
             }
 
             if (e.KeyCode == Keys.L)
             {
-                world.ShowLaser = !world.ShowLaser;
+                world.ShowAllLasers = !world.ShowAllLasers;
             }
 
             if (e.KeyCode == Keys.Space)
@@ -143,45 +133,53 @@ namespace Mood
                 world.AddObject(laser);
 
                 world.ShootTest(laser);
-
-                bl_CameraPosition.Refresh();    
             }
 
             player.Position = camera.getCameraEye();
 
             IHitable obj = world.HitTest(player);
 
-            if (obj != null)
+            if (obj != null && (!(obj is IShootable) || (obj is IShootable && !(obj as IShootable).IsDead)))
             {
-                //MessageBox.Show("HIT");
-
                 if (obj is IMoveable)
                 {
                     IMoveable objmv = obj as IMoveable;
 
                     Vector3d oldPosition = new Vector3d(objmv.GetPosition().X, objmv.GetPosition().Y, objmv.GetPosition().Z);
 
-                    objmv.Move(camera.cameraDirection);
+                    Vector3d v = camera.cameraDirection - lastDirection;
 
-                    if (world.HitTest(objmv) != null)
+                    objmv.Move(v);
+
+                    IHitable hit = world.HitTest(objmv);
+
+                    while (hit != null)
                     {
-                        objmv.SetPosition(oldPosition);
+                        if (hit is IMoveable)
+                        {
+                            (hit as IMoveable).Move(v);
 
-                        //MessageBox.Show("SPHERE HIT");
+                            objmv = hit as IMoveable;
+
+                            hit = world.HitTest(objmv);
+                        }
+                        else
+                        {
+                            objmv.SetPosition(oldPosition);
+
+                            hit = null;
+                        }
                     }
                 }
 
                 camera.cameraEye = lastPosition;
                 camera.cameraDirection = lastDirection;
-
-                weapon.A = camera.cameraEye;
-                weapon.B = camera.cameraDirection;
             }
 
-            bl_CameraPosition.Refresh();
+            ogl.Refresh();
         }
 
-        private void bl_CameraPosition_MouseDown(object sender, MouseEventArgs e)
+        private void ogl_MouseDown(object sender, MouseEventArgs e)
         {
             Laser laser = new Laser(new Vector3d(camera.cameraEye), new Vector3d(camera.cameraDirection), Color.Blue);
 
@@ -189,14 +187,7 @@ namespace Mood
 
             world.ShootTest(laser);
 
-            bl_CameraPosition.Refresh();
-        }
-
-        private void SpawnSphere()
-        {
-            Random random = new Random();
-
-            world.AddObject(new Sphere(new Vector3d((float)random.NextDouble() * 6f - 3f, -0.8f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue));
+            ogl.Refresh();
         }
     }
 }
