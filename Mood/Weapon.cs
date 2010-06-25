@@ -6,6 +6,15 @@ namespace Mood
 {
     class Weapon
     {
+        public float Range { get; private set; }
+        private Bitmap wepTexture;
+
+        public Weapon(float range, Bitmap bitmap)
+        {
+            this.Range = range;
+            this.wepTexture = bitmap;
+        }
+
         public void Draw(int width, int height)
         {
             //Gl.glPushMatrix();
@@ -20,7 +29,7 @@ namespace Mood
 
             //Gl.glColor3f(Color.Blue.R, Color.Blue.G, Color.Blue.B);
 
-            Bitmap bitmap = Resources.Pistol;
+            Bitmap bitmap = this.wepTexture;// Resources.Pistol;
 
             bitmap = ResizeBitmap(bitmap, (int)(0.35 * width), (int)(0.35 * height));
 

@@ -5,7 +5,22 @@ using System.Text;
 
 namespace Mood
 {
-    class TopCamera
+    public class TopCamera : Camera
     {
-    }
+        public TopCamera() : base()
+        {
+            this.rotatedXAngle = 90;
+            this.cameraEye = new Vector3d(0, 3.5f, 0);
+        }
+
+        public override void RotateY(double angle)
+        {
+            //ignore
+        }
+
+        public override void RotateX(double angle)
+        {
+            //ignore
+        }
+    }    
 }
