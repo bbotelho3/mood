@@ -32,28 +32,6 @@ namespace Mood
 
         public bool HitTest(IHitable obj)
         {
-            //Vector3d a = new Vector3d(center.X + (float)radius, center.Y + (float)radius, center.Z + (float)radius);
-            //Vector3d b = new Vector3d(center.X - (float)radius, center.Y - (float)radius, center.Z - (float)radius);
-
-            //double dist = Geometry.LinePointDistance(a, b, obj.GetPosition(), true);
-
-            //if (dist < 0.1d)
-            //{
-            //    return true;
-            //}
-
-            //a = new Vector3d(center.X + (float)radius, center.Y + (float)radius, center.Z - (float)radius);
-            //b = new Vector3d(center.X - (float)radius, center.Y + (float)radius, center.Z + (float)radius);
-
-            //dist = Geometry.LinePointDistance(a, b, obj.GetPosition(), true);
-
-            //if (dist < 0.1d)
-            //{
-            //    return true;
-            //}
-
-            //return false;
-
             double tol = 0.05d;
 
             bool hit = Geometry.LinePointDistance(this.BoundingBox.A, this.BoundingBox.B, obj.BoundingBox.A, true) < tol;

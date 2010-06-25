@@ -9,10 +9,25 @@ namespace Mood
 {
     public partial class frmMain : Form
     {
-        private Camera camera;
+        private Camera fpsCamera;
+        private Camera topCamera;
         private World world;
         private Player player;
-        private Weapon weapon;
+        private Weapon[] weapons;
+        private int selectedWeapon;
+        private CameraStyle cameraStyle = CameraStyle.FPS;
+
+        private enum CameraStyle
+        {
+            Top = 0,
+            FPS = 1
+        }
+
+        private enum WeaponType
+        {
+            Crowbar = 0,
+            Pistol = 1
+        }
 
         public frmMain()
         {
@@ -25,27 +40,34 @@ namespace Mood
             Gl.glEnable(Gl.GL_TEXTURE_2D);
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glEnable(Gl.GL_BLEND);
-            
+
             Gl.glDepthMask(Gl.GL_TRUE);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
             world = new World();
 
-            Texture texture = new Texture(Resources.brick1);
+            Texture brickWall = new Texture(Resources.brick1);
+            Texture woodFloor = new Texture(Resources.brick1);
 
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), brickWall));
             world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Resources.Dock)));
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), texture));
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), texture));
-            world.AddObject(new Floor(new Vector3d(-3, -1, -3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), texture));
-            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), new Vector3d(3, -1, 3), new Vector3d(3, -1, 0), texture));
-            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), new Vector3d(3, -1, -3), new Vector3d(3, -1, 0), texture));
-            world.AddObject(new Floor(new Vector3d(-3, -1, 3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), texture));
+            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), brickWall));
+            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), brickWall));
+            world.AddObject(new Floor(new Vector3d(-3, -1, -3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), woodFloor));
+            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), new Vector3d(3, -1, 3), new Vector3d(3, -1, 0), woodFloor));
+            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), new Vector3d(3, -1, -3), new Vector3d(3, -1, 0), woodFloor));
+            world.AddObject(new Floor(new Vector3d(-3, -1, 3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), woodFloor));
             world.AddObject(new Sphere(new Vector3d(1, -0.5f, 1), 0.5d, Color.Blue));
 
-            weapon = new Weapon();
+            weapons = new Weapon[2];
+            weapons[0] = new Weapon(0.001f, Resources.CrowBar);
+            weapons[1] = new Weapon(20, Resources.Pistol);
+            
+            selectedWeapon = (int)WeaponType.Pistol;
+
             player = new Player();
-            camera = new Camera();
+            fpsCamera = new FPSCamera();
+            topCamera = new TopCamera();
 
             SetProjection();
         }
@@ -56,18 +78,26 @@ namespace Mood
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
             Gl.glLoadIdentity();
 
-            camera.Render();
+            switch (this.cameraStyle)
+            {
+                case CameraStyle.FPS:
+                    fpsCamera.Render();
+                    world.Draw();
+                    weapons[selectedWeapon].Draw(this.Width, this.Height);
+                    break;
 
-            world.Draw();
-
-            weapon.Draw(this.Width, this.Height);
+                case CameraStyle.Top:
+                    topCamera.Render();
+                    world.Draw();
+                    break;
+            }
 
             Gl.glFlush();
 
             SetProjection();
 
-            this.lbl_CameraPosition.Text = "Camera Position: " + this.camera.getCameraEye();
-            this.lbl_CameraDirection.Text = "Camera Direction: " + this.camera.getCameraDirection();
+            this.lbl_CameraPosition.Text = "Camera Position: " + this.fpsCamera.getCameraEye();
+            this.lbl_CameraDirection.Text = "Camera Direction: " + this.fpsCamera.getCameraDirection();
         }
 
         private void ogl_Resize(object sender, EventArgs e)
@@ -84,39 +114,82 @@ namespace Mood
             Gl.glViewport(0, 0, ogl.Width, ogl.Height);
         }
 
+        private void treatFpsCamera(Keys key)
+        {
+            if (key == Keys.W)
+            {
+                fpsCamera.MoveFwBw(0.1);
+            }
+
+            if (key == Keys.S)
+            {
+                fpsCamera.MoveFwBw(-0.1);
+            }
+
+            if (key == Keys.A)
+            {
+                fpsCamera.RotateY(-5);
+            }
+
+            if (key == Keys.D)
+            {
+                fpsCamera.RotateY(5);
+            }
+
+            if (key == Keys.PageUp)
+            {
+                fpsCamera.RotateX(-5);
+            }
+
+            if (key == Keys.PageDown)
+            {
+                fpsCamera.RotateX(5);
+            }
+        }
+
+        private void treatTopCamera(Keys key)
+        {
+            if (key == Keys.W)
+            {
+                topCamera.MoveFwBw(0.1);
+            }
+
+            if (key == Keys.S)
+            {
+                topCamera.MoveFwBw(-0.1);
+            }
+        }
+
         private void ogl_KeyDown(object sender, KeyEventArgs e)
         {
-            Vector3d lastPosition = new Vector3d(camera.getCameraEye().X, camera.getCameraEye().Y, camera.getCameraEye().Z);
-            Vector3d lastDirection = new Vector3d(camera.getCameraDirection().X, camera.getCameraDirection().Y, camera.getCameraDirection().Z);
+            Vector3d lastPosition = new Vector3d(fpsCamera.getCameraEye().X, fpsCamera.getCameraEye().Y, fpsCamera.getCameraEye().Z);
+            Vector3d lastDirection = new Vector3d(fpsCamera.getCameraDirection().X, fpsCamera.getCameraDirection().Y, fpsCamera.getCameraDirection().Z);
 
-            if (e.KeyCode == Keys.W)
+            if (e.KeyCode == Keys.D0)
             {
-                camera.MoveFwBw(0.1);
+                if (this.weapons[0] != null)
+                {
+                    this.selectedWeapon = (int)WeaponType.Crowbar;
+                }
             }
 
-            if (e.KeyCode == Keys.S)
+            if (e.KeyCode == Keys.D1)
             {
-                camera.MoveFwBw(-0.1);
+                if (this.weapons[1] != null)
+                {
+                    this.selectedWeapon = (int)WeaponType.Pistol;
+                }
             }
 
-            if (e.KeyCode == Keys.A)
+            switch (this.cameraStyle)
             {
-                camera.RotateY(-5);
-            }
+                case CameraStyle.FPS:
+                    treatFpsCamera(e.KeyCode);
+                    break;
 
-            if (e.KeyCode == Keys.D)
-            {
-                camera.RotateY(5);
-            }
-
-            if (e.KeyCode == Keys.PageUp)
-            {
-                camera.RotateX(-5);
-            }
-
-            if (e.KeyCode == Keys.PageDown)
-            {
-                camera.RotateX(5);
+                case CameraStyle.Top:
+                    treatTopCamera(e.KeyCode);
+                    break;
             }
 
             if (e.KeyCode == Keys.P)
@@ -129,16 +202,28 @@ namespace Mood
                 world.ShowAllLasers = !world.ShowAllLasers;
             }
 
+            if (e.KeyCode == Keys.M)
+            {
+                if (this.cameraStyle == CameraStyle.FPS)
+                {
+                    this.cameraStyle = CameraStyle.Top;
+                }
+                else
+                {
+                    this.cameraStyle = CameraStyle.FPS;
+                }
+            }
+
             if (e.KeyCode == Keys.Space)
             {
-                Laser laser = new Laser(new Vector3d(camera.cameraEye), new Vector3d(camera.cameraDirection), Color.Blue);
+                Laser laser = new Laser(new Vector3d(fpsCamera.cameraEye), new Vector3d(fpsCamera.cameraDirection), this.weapons[selectedWeapon].Range, Color.Blue);
 
                 world.AddObject(laser);
 
                 world.ShootTest(laser);
             }
 
-            player.Position = camera.getCameraEye();
+            player.Position = fpsCamera.getCameraEye();
 
             IHitable obj = world.HitTest(player);
 
@@ -146,25 +231,14 @@ namespace Mood
             {
                 if (obj is IMoveable)
                 {
-                    Vector3d v = camera.cameraDirection - lastDirection;
+                    Vector3d v = fpsCamera.cameraDirection - lastDirection;
 
                     world.MoveObject(obj as IMoveable, v);
                 }
 
-                camera.cameraEye = lastPosition;
-                camera.cameraDirection = lastDirection;
+                fpsCamera.cameraEye = lastPosition;
+                fpsCamera.cameraDirection = lastDirection;
             }
-
-            ogl.Refresh();
-        }
-
-        private void ogl_MouseDown(object sender, MouseEventArgs e)
-        {
-            Laser laser = new Laser(new Vector3d(camera.cameraEye), new Vector3d(camera.cameraDirection), Color.Blue);
-
-            world.AddObject(laser);
-
-            world.ShootTest(laser);
 
             ogl.Refresh();
         }

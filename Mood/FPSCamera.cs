@@ -18,32 +18,16 @@ namespace Mood
 
         public override void MoveFwBw(double step)
         {
-            Vector3d vector = cameraDirection - cameraEye;
+            double angle = rotatedYAngle * PIdiv180;
+
+            Vector3d dir = firstCameraDirection * rotationY(angle);
+            dir += cameraEye;
+            
+            Vector3d vector = dir - cameraEye;
 
             float ySum = vector.Y * (float)step;
             float xSum = vector.X * (float)step;
             float zSum = vector.Z * (float)step;
-
-            //float xPerc = (Math.Abs(xSum) / (Math.Abs(xSum) + Math.Abs(zSum)));
-            //float zPerc = 1 - xPerc;
-
-            //if (vector.X <= 0)
-            //{
-            //    xSum += xPerc * ySum;
-            //}
-            //else
-            //{
-            //    xSum -= xPerc * ySum;
-            //}
-
-            //if (vector.Z <= 0)
-            //{
-            //    zSum += zPerc * ySum;
-            //}
-            //else
-            //{
-            //    zSum -= zPerc * ySum;
-            //}
 
             cameraEye.X += xSum; 
             cameraEye.Z += zSum; 

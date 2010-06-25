@@ -36,14 +36,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
     <Reference Include="Tao.FreeGlut, Version=2.4.0.2, Culture=neutral, PublicKeyToken=6e602a6ad6c0d06d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Tao.FreeGlut.dll</HintPath>
@@ -103,7 +98,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Sphere.cs" />
-    <Compile Include="Square.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="TopCamera.cs" />
     <Compile Include="Vector3d.cs" />
@@ -124,8 +118,10 @@
     <Content Include="Libraries\Tao.Platform.Windows.xml" />
     <None Include="Resources\Image1.jpg" />
     <Content Include="Resources\Pistol.png" />
+    <Content Include="Textures\Floor\Wooden Floor_01.png" />
     <Content Include="Textures\Wall\brick1.jpg" />
     <Content Include="Textures\Wall\Dock.jpg" />
+    <Content Include="Textures\Weapons\CrowBar.png" />
     <None Include="Textures\Wall\weap.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -52,7 +52,6 @@
             this.ogl.StencilBits = ((byte)(0));
             this.ogl.TabIndex = 0;
             this.ogl.Paint += new System.Windows.Forms.PaintEventHandler(this.ogl_Paint);
-            this.ogl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ogl_MouseDown);
             this.ogl.Resize += new System.EventHandler(this.ogl_Resize);
             this.ogl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ogl_KeyDown);
             // 

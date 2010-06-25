@@ -12,20 +12,20 @@ namespace Mood
         private Color color;
         private float height;
 
-        public Laser(Vector3d a, Vector3d b)
+        public Laser(Vector3d a, Vector3d b, float range)
         {
             A = a;
             B = b;
 
-            SetRange(20f);
+            SetRange(range);
 
             color = Color.White;
 
             height = -0.2f;
         }
 
-        public Laser(Vector3d a, Vector3d b, Color color)
-            : this(a, b)
+        public Laser(Vector3d a, Vector3d b, float range, Color color)
+            : this(a, b, range)
         {
             this.color = color;
         }
@@ -37,8 +37,8 @@ namespace Mood
             //A.X += vector.X * (float)step;
             //A.Z += vector.Z * (float)step;
 
-            B.X = vector.X * range;
-            B.Z = vector.Z * range;
+            B.X += vector.X * range;
+            B.Z += vector.Z * range;
         }
 
         public override void Draw()

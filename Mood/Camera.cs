@@ -9,7 +9,7 @@ namespace Mood
 {
     public class Camera
     {
-        private const float PIdiv180 = (float)Math.PI / 180;
+        protected const float PIdiv180 = (float)Math.PI / 180;
 
         public Vector3d cameraEye;
         public Vector3d cameraDirection;
@@ -31,12 +31,12 @@ namespace Mood
 
         public virtual void MoveFwBw(double step)
         {
-            double angleY = this.rotatedYAngle * PIdiv180;
+            //double angleY = this.rotatedYAngle * PIdiv180;
 
-            Vector3d trans = firstCameraDirection * rotationY(angleY);
-            Vector3d dir = cameraEye + trans;
+            //Vector3d trans = firstCameraDirection * rotationY(angleY);
+            //Vector3d dir = cameraEye + trans;
 
-            Vector3d vector = dir - cameraEye;
+            Vector3d vector = cameraDirection - cameraEye;
             cameraEye.X += vector.X * (float)step;
             cameraEye.Y += vector.Y * (float)step;
             cameraEye.Z += vector.Z * (float)step;
@@ -45,7 +45,7 @@ namespace Mood
             cameraDirection.Z += vector.Z * (float)step;
         }
 
-        public void RotateY(double angle)
+        public virtual void RotateY(double angle)
         {
             this.rotatedYAngle += angle;
             //Vector3d transl = cameraDirection - cameraEye;
@@ -75,7 +75,7 @@ namespace Mood
             //Gl.glMatrixMode(Gl.GL_MODELVIEW);
         }
 
-        private static Matrix rotationY(double angle)
+        protected virtual Matrix rotationY(double angle)
         {
             return new Matrix(new double[,]{{Math.Cos(angle),0, Math.Sin(angle),0},
                                             {0,1,0,0},
@@ -87,7 +87,7 @@ namespace Mood
             //0 0 0 1
         }
 
-        private static Matrix rotationX(double angle)
+        protected virtual Matrix rotationX(double angle)
         {
             return new Matrix(new double[,]{{1,0,0,0},
                                             {0,Math.Cos(angle),- Math.Sin(angle),0},                                            
