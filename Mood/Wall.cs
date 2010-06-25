@@ -26,6 +26,8 @@ namespace Mood
             Height = 1d;
 
             color = Color.White;
+
+            BoundingBox = new BoundingBox(A, B, C, D);
         }
 
         public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Color color)
@@ -40,11 +42,16 @@ namespace Mood
             this.texture = texture;
         }
 
-        public bool HitTest(IMoveable obj)
-        {
-            double dist = Geometry.LinePointDistance(A, C, obj.GetPosition(), true);
+        public BoundingBox BoundingBox { get; set; }
 
-            return dist < 0.1d;
+        public bool HitTest(IHitable obj)
+        {
+            bool hit = Geometry.LinePointDistance(this.BoundingBox.A, this.BoundingBox.C, obj.BoundingBox.A, true) < 0.1d;
+            hit = hit || Geometry.LinePointDistance(this.BoundingBox.A, this.BoundingBox.C, obj.BoundingBox.B, true) < 0.1d;
+            hit = hit || Geometry.LinePointDistance(this.BoundingBox.A, this.BoundingBox.C, obj.BoundingBox.C, true) < 0.1d;
+            hit = hit || Geometry.LinePointDistance(this.BoundingBox.A, this.BoundingBox.C, obj.BoundingBox.D, true) < 0.1d;
+            //double dist = Geometry.LinePointDistance(A, C, obj.GetPosition(), true);
+            return hit;
         }
 
         public override void Draw()

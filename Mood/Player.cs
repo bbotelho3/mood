@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mood
 {
-    public class Player : IMoveable
+    public class Player : IHitable
     {
         public Vector3d Position { get; set; }
 
@@ -14,18 +14,22 @@ namespace Mood
             Position = new Vector3d();
         }
 
-        public void Move(Vector3d direction)
+        public BoundingBox BoundingBox
         {
+            get
+            {
+                return new BoundingBox(Position + new Vector3d(-0.2f, 0f, 0.2f), Position + new Vector3d(0.2f, 0f, 0.2f), Position + new Vector3d(-0.2f, 0f, -0.2f), Position + new Vector3d(0.2f, 0f, -0.2f));
+            }
+            set
+            {
+                return;
+            }
         }
 
-        public Vector3d GetPosition()
+        // HitTest não é executado para player pois ele não é parte do mundo.
+        public bool HitTest(IHitable obj)
         {
-            return Position;
-        }
-
-        public void SetPosition(Vector3d position)
-        {
-            Position = position;
+            return true;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Mood
                 lastLaser = obj as Laser;
         }
 
-        public IHitable HitTest(IMoveable mvObj)
+        public IHitable HitTest(IHitable mvObj)
         {
             foreach (IHitable obj in HitableObjects)
             {
@@ -59,6 +59,7 @@ namespace Mood
         public void ShootTest(Laser line)
         {
             IShootable shot = null;
+
             double minDistance = 100d;
 
             foreach (IShootable obj in ShootableObjects)
@@ -78,19 +79,43 @@ namespace Mood
                     HitableObjects.Remove(shot as IHitable);
                 }
 
-                //line.SetRange((float)Geometry.PointDistance(shot.LastPosition(), line.B));
+                line.SetRange((float)Geometry.PointDistance(shot.LastPosition(), line.A));
 
-                line.B = shot.LastPosition();
+                //line.B = shot.LastPosition();
 
                 shot.Die();
             }
+        }
+
+        public bool MoveObject(IMoveable mvObj, Vector3d direction)
+        {
+            Vector3d oldPosition = new Vector3d(mvObj.GetPosition().X, mvObj.GetPosition().Y, mvObj.GetPosition().Z);
+
+            mvObj.Move(direction);
+
+            if (mvObj is IHitable)
+            {
+                IHitable hit = HitTest(mvObj as IHitable);
+
+                if (hit != null)
+                {
+                    if (!(hit is IMoveable) || !MoveObject(hit as IMoveable, direction))
+                    {
+                        mvObj.SetPosition(oldPosition);
+
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public void AddSphere()
         {
             Random random = new Random();
 
-            AddObject(new Sphere(new Vector3d((float)random.NextDouble() * 6f - 3f, -0.8f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue));
+            AddObject(new Sphere(new Vector3d((float)random.NextDouble() * 6f - 3f, -0.5f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue));
         }
 
         public void Draw()

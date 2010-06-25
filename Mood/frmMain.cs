@@ -23,7 +23,10 @@ namespace Mood
             Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             Glut.glutInit();
             Gl.glEnable(Gl.GL_TEXTURE_2D);
+            Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glEnable(Gl.GL_BLEND);
+            
+            Gl.glDepthMask(Gl.GL_TRUE);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
             world = new World();
@@ -38,7 +41,7 @@ namespace Mood
             world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), new Vector3d(3, -1, 3), new Vector3d(3, -1, 0), texture));
             world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), new Vector3d(3, -1, -3), new Vector3d(3, -1, 0), texture));
             world.AddObject(new Floor(new Vector3d(-3, -1, 3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), texture));
-            world.AddObject(new Sphere(new Vector3d(1, -0.8f, 1), 0.5d, Color.Blue));
+            world.AddObject(new Sphere(new Vector3d(1, -0.5f, 1), 0.5d, Color.Blue));
 
             weapon = new Weapon();
             player = new Player();
@@ -50,7 +53,7 @@ namespace Mood
         private void ogl_Paint(object sender, PaintEventArgs e)
         {
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
-            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT);
+            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
             Gl.glLoadIdentity();
 
             camera.Render();
@@ -77,7 +80,7 @@ namespace Mood
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             //Gl.glFrustum(-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
-            Glu.gluPerspective(100, 1.0, 0.0, 20.0);
+            Glu.gluPerspective(100, 1.0, 0.1f, 20.0);
             Gl.glViewport(0, 0, ogl.Width, ogl.Height);
         }
 
@@ -143,33 +146,9 @@ namespace Mood
             {
                 if (obj is IMoveable)
                 {
-                    IMoveable objmv = obj as IMoveable;
-
-                    Vector3d oldPosition = new Vector3d(objmv.GetPosition().X, objmv.GetPosition().Y, objmv.GetPosition().Z);
-
                     Vector3d v = camera.cameraDirection - lastDirection;
 
-                    objmv.Move(v);
-
-                    IHitable hit = world.HitTest(objmv);
-
-                    while (hit != null)
-                    {
-                        if (hit is IMoveable)
-                        {
-                            (hit as IMoveable).Move(v);
-
-                            objmv = hit as IMoveable;
-
-                            hit = world.HitTest(objmv);
-                        }
-                        else
-                        {
-                            objmv.SetPosition(oldPosition);
-
-                            hit = null;
-                        }
-                    }
+                    world.MoveObject(obj as IMoveable, v);
                 }
 
                 camera.cameraEye = lastPosition;

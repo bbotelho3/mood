@@ -2,6 +2,8 @@
 {
     public interface IHitable
     {
-        bool HitTest(IMoveable obj);
+        BoundingBox BoundingBox { get; set; }
+
+        bool HitTest(IHitable obj);
     }
 }

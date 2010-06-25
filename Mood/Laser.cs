@@ -21,7 +21,7 @@ namespace Mood
 
             color = Color.White;
 
-            height = -0.4f;
+            height = -0.2f;
         }
 
         public Laser(Vector3d a, Vector3d b, Color color)
@@ -37,9 +37,8 @@ namespace Mood
             //A.X += vector.X * (float)step;
             //A.Z += vector.Z * (float)step;
 
-            B.X += vector.X * range;
-            B.Y += vector.Y * range;
-            B.Z += vector.Z * range;
+            B.X = vector.X * range;
+            B.Z = vector.Z * range;
         }
 
         public override void Draw()
