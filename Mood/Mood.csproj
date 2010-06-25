@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B12D67B6-3582-4C1A-9F1D-7221B95B153C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -39,6 +39,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="Tao.FreeGlut, Version=2.4.0.2, Culture=neutral, PublicKeyToken=6e602a6ad6c0d06d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Tao.FreeGlut.dll</HintPath>
@@ -69,6 +70,7 @@
     <Compile Include="Geometry.cs" />
     <Compile Include="IHitable.cs" />
     <Compile Include="IMoveable.cs" />
+    <Compile Include="IPositionable.cs" />
     <Compile Include="IShootable.cs" />
     <Compile Include="Laser.cs" />
     <Compile Include="Player.cs" />

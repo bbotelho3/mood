@@ -1,11 +1,7 @@
 ﻿namespace Mood
 {
-    public interface IMoveable
+    public interface IMoveable : IPositionable
     {
         void Move(Vector3d direction);
-        
-        Vector3d GetPosition();
-
-        void SetPosition(Vector3d position);
     }
 }

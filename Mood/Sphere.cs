@@ -10,8 +10,6 @@ namespace Mood
         private double radius;
         private Color color;
 
-        public double LastShootDistance { get; set; }
-
         public Sphere(Vector3d center, double radius, Color color)
         {
             this.center = center;
@@ -19,8 +17,6 @@ namespace Mood
             this.color = color;
 
             IsDead = false;
-
-            LastShootDistance = 100d;
 
             Vector3d a = new Vector3d(center.X - (float)radius, center.Y, center.Z + (float)radius);
             Vector3d b = new Vector3d(center.X + (float)radius, center.Y, center.Z + (float)radius);
@@ -67,11 +63,6 @@ namespace Mood
             center = position;
         }
 
-        public Vector3d LastPosition()
-        {
-            return center;
-        }
-
         public BoundingBox BoundingBox { get; set; }
 
         public override void Draw()
@@ -101,8 +92,6 @@ namespace Mood
         public bool ShootTest(Laser laser)
         {
             double dist = Geometry.LinePointDistance(laser.A, laser.B, center, true);
-
-            LastShootDistance = dist;
 
             return dist < radius;
         }

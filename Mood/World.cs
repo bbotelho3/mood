@@ -56,7 +56,7 @@ namespace Mood
             return null;
         }
 
-        public void ShootTest(Laser line)
+        public void ShootTest(Laser laser)
         {
             IShootable shot = null;
 
@@ -64,8 +64,11 @@ namespace Mood
 
             foreach (IShootable obj in ShootableObjects)
             {
-                if (obj.ShootTest(line) && obj.LastShootDistance < minDistance)
+                double dist = Geometry.PointDistance(laser.A, obj.GetPosition());
+
+                if (obj.ShootTest(laser) && dist < minDistance)
                 {
+                    minDistance = dist;
                     shot = obj;
                 }
             }
@@ -79,7 +82,7 @@ namespace Mood
                     HitableObjects.Remove(shot as IHitable);
                 }
 
-                line.SetRange((float)Geometry.PointDistance(shot.LastPosition(), line.A));
+                laser.SetRange((float)Geometry.PointDistance(shot.GetPosition(), laser.A));
 
                 //line.B = shot.LastPosition();
 

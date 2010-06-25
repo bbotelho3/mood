@@ -47,7 +47,7 @@ namespace Mood
             world = new World();
 
             Texture brickWall = new Texture(Resources.brick1);
-            Texture woodFloor = new Texture(Resources.brick1);
+            Texture woodFloor = new Texture(Resources.Wooden_Floor_01);
 
             world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), brickWall));
             world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Resources.Dock)));
@@ -165,7 +165,7 @@ namespace Mood
             Vector3d lastPosition = new Vector3d(fpsCamera.getCameraEye().X, fpsCamera.getCameraEye().Y, fpsCamera.getCameraEye().Z);
             Vector3d lastDirection = new Vector3d(fpsCamera.getCameraDirection().X, fpsCamera.getCameraDirection().Y, fpsCamera.getCameraDirection().Z);
 
-            if (e.KeyCode == Keys.D0)
+            if (e.KeyCode == Keys.D1)
             {
                 if (this.weapons[0] != null)
                 {
@@ -173,7 +173,7 @@ namespace Mood
                 }
             }
 
-            if (e.KeyCode == Keys.D1)
+            if (e.KeyCode == Keys.D2)
             {
                 if (this.weapons[1] != null)
                 {
