@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Tao.OpenGl;
+using Tao.FreeGlut;
 
 namespace Mood
 {
@@ -37,8 +38,9 @@ namespace Mood
             //A.X += vector.X * (float)step;
             //A.Z += vector.Z * (float)step;
 
-            B.X += vector.X * range;
-            B.Z += vector.Z * range;
+            //B.X += vector.X * range;
+            //B.Y += vector.Y * range;
+            //B.Z += vector.Z * range;
         }
 
         public override void Draw()
@@ -54,6 +56,18 @@ namespace Mood
             float t2sina2 = t2 / 2 * (float)Math.Sin(angle);
             float t2cosa2 = t2 / 2 * (float)Math.Cos(angle);
 
+
+                        Vector3d direction = B - A;
+
+            Vector3d cross = Geometry.CrossProduct(direction, B);
+
+            cross = Geometry.Normalize(cross);
+
+            Vector3d cross_half = Geometry.Scale(cross, 4f * 0.5f);
+
+            DrawTriangle(x0 - u_half, x0 + u_half, x1 + u_half);
+            DrawTriangle(x1 - u_half, x1 + u_half, x0 - u_half);
+
             Gl.glPushMatrix();
             Gl.glColor3f(Color.Blue.R, Color.Blue.G, Color.Blue.B);
             Gl.glBegin(Gl.GL_TRIANGLES);
@@ -64,7 +78,11 @@ namespace Mood
             Gl.glVertex3f(x1 - t2sina1, height, y1 + t2cosa1);
             Gl.glVertex3f(x1 + t2sina1, height, y1 - t2cosa1);
             Gl.glEnd();
+
             Gl.glPopMatrix();
+
+
+
         }
     }
 }

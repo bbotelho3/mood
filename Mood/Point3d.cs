@@ -3,7 +3,7 @@ using Mood.GeoCalc;
 
 namespace Mood
 {
-    public class Vector3d
+    public class Point3d
     {
         #region fields
 
@@ -15,19 +15,19 @@ namespace Mood
 
         #region Constructors
 
-        public Vector3d()
+        public Point3d()
             : this(0, 0, 0)
         {
         }
 
-        public Vector3d(float X, float Y, float Z)
+        public Point3d(float X, float Y, float Z)
         {
             this.X = X;
             this.Y = Y;
             this.Z = Z;
         }
 
-        public Vector3d(Vector3d v)
+        public Point3d(Point3d v)
         {
             this.X = v.X;
             this.Y = v.Y;
@@ -53,7 +53,7 @@ namespace Mood
             return String.Format("X: {0}, Y: {1}, Z: {2}", this.X, this.Y, this.Z);
         }
 
-        public double DotProduct(Vector3d v)
+        public double DotProduct(Point3d v)
         {
             return (X * Y * Z) + (v.X * v.Y * v.Z);
         }
@@ -62,9 +62,9 @@ namespace Mood
 
         #region Public Static Methods
 
-        public static Vector3d operator -(Vector3d v1, Vector3d v2)
+        public static Point3d operator -(Point3d v1, Point3d v2)
         {
-            return new Vector3d(v1.X - v2.X,
+            return new Point3d(v1.X - v2.X,
                     v1.Y - v2.Y,
                     v1.Z - v2.Z);
 
@@ -75,9 +75,9 @@ namespace Mood
             //return v1;
         }
 
-        public static Vector3d operator +(Vector3d v1, Vector3d v2)
+        public static Point3d operator +(Point3d v1, Point3d v2)
         {
-            return new Vector3d(v1.X + v2.X,
+            return new Point3d(v1.X + v2.X,
                                 v1.Y + v2.Y,
                                 v1.Z + v2.Z);
 
@@ -88,7 +88,7 @@ namespace Mood
             //return v1;
         }
 
-        public static Vector3d operator *(Vector3d v1, Matrix m1)
+        public static Point3d operator *(Point3d v1, Matrix m1)
         {
             Matrix mResult = v1.toMatrix() * m1;
             double[,] result = mResult.GetMatrix();
@@ -98,10 +98,10 @@ namespace Mood
                 throw new MatrixSizeException();
             }
 
-            return new Vector3d((float)result[0, 0], (float)result[0, 1], (float)result[0, 2]);       
+            return new Point3d((float)result[0, 0], (float)result[0, 1], (float)result[0, 2]);       
         }
 
-        public static Vector3d Convert(Matrix m)
+        public static Point3d Convert(Matrix m)
         {
             double[,] matrix = m.GetMatrix();
             if (matrix.GetLength(0) != 1 || matrix.GetLength(1) < 3)
@@ -109,7 +109,7 @@ namespace Mood
                 throw new MatrixSizeException();
             }
 
-            return new Vector3d((float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2]);
+            return new Point3d((float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2]);
         }
 
         #endregion Public Static Methods
