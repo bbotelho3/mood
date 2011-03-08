@@ -2,6 +2,6 @@
 {
     public interface IMoveable : IPositionable
     {
-        void Move(Vector3d direction);
+        void Move(Point3d direction);
     }
 }

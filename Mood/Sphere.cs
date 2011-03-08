@@ -6,11 +6,11 @@ namespace Mood
 {
     class Sphere : WorldObject, IMoveable, IHitable, IShootable
     {
-        private Vector3d center;
+        private Point3d center;
         private double radius;
         private Color color;
 
-        public Sphere(Vector3d center, double radius, Color color)
+        public Sphere(Point3d center, double radius, Color color)
         {
             this.center = center;
             this.radius = radius;
@@ -18,10 +18,10 @@ namespace Mood
 
             IsDead = false;
 
-            Vector3d a = new Vector3d(center.X - (float)radius, center.Y, center.Z + (float)radius);
-            Vector3d b = new Vector3d(center.X + (float)radius, center.Y, center.Z + (float)radius);
-            Vector3d c = new Vector3d(center.X - (float)radius, center.Y, center.Z - (float)radius);
-            Vector3d d = new Vector3d(center.X + (float)radius, center.Y, center.Z - (float)radius);
+            Point3d a = new Point3d(center.X - (float)radius, center.Y, center.Z + (float)radius);
+            Point3d b = new Point3d(center.X + (float)radius, center.Y, center.Z + (float)radius);
+            Point3d c = new Point3d(center.X - (float)radius, center.Y, center.Z - (float)radius);
+            Point3d d = new Point3d(center.X + (float)radius, center.Y, center.Z - (float)radius);
 
             BoundingBox = new BoundingBox(a, b, c, d);
         }
@@ -53,12 +53,12 @@ namespace Mood
             return hit;
         }
 
-        public Vector3d GetPosition()
+        public Point3d GetPosition()
         {
             return center;
         }
 
-        public void SetPosition(Vector3d position)
+        public void SetPosition(Point3d position)
         {
             center = position;
         }
@@ -74,22 +74,22 @@ namespace Mood
             Gl.glPopMatrix();
         }
 
-        public void Move(Vector3d direction)
+        public void Move(Point3d direction)
         {
             float step = 0.5f;
 
             center.X += direction.X * (float)step;
             center.Z += direction.Z * (float)step;
 
-            Vector3d a = new Vector3d(center.X - (float)radius, center.Y, center.Z + (float)radius);
-            Vector3d b = new Vector3d(center.X + (float)radius, center.Y, center.Z + (float)radius);
-            Vector3d c = new Vector3d(center.X - (float)radius, center.Y, center.Z - (float)radius);
-            Vector3d d = new Vector3d(center.X + (float)radius, center.Y, center.Z - (float)radius);
+            Point3d a = new Point3d(center.X - (float)radius, center.Y, center.Z + (float)radius);
+            Point3d b = new Point3d(center.X + (float)radius, center.Y, center.Z + (float)radius);
+            Point3d c = new Point3d(center.X - (float)radius, center.Y, center.Z - (float)radius);
+            Point3d d = new Point3d(center.X + (float)radius, center.Y, center.Z - (float)radius);
 
             BoundingBox = new BoundingBox(a, b, c, d);
         }
 
-        public bool ShootTest(Laser laser)
+        public bool ShootTest(Hit laser)
         {
             double dist = Geometry.LinePointDistance(laser.A, laser.B, center, true);
 

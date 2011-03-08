@@ -10,7 +10,7 @@ namespace Mood
         public List<IHitable> HitableObjects { get; private set; }
         public List<IShootable> ShootableObjects { get; private set; }
 
-        public Laser lastLaser;
+        public Hit lastLaser;
 
         public bool ShowAllLasers { get; set; }
         public bool ShowLastLaser { get; set; }
@@ -39,8 +39,8 @@ namespace Mood
                 ShootableObjects.Add(obj as IShootable);
             }
 
-            if (obj is Laser)
-                lastLaser = obj as Laser;
+            if (obj is Hit)
+                lastLaser = obj as Hit;
         }
 
         public IHitable HitTest(IHitable mvObj)
@@ -56,7 +56,7 @@ namespace Mood
             return null;
         }
 
-        public void ShootTest(Laser laser)
+        public void ShootTest(Hit laser)
         {
             IShootable shot = null;
 
@@ -84,15 +84,13 @@ namespace Mood
 
                 laser.SetRange((float)Geometry.PointDistance(shot.GetPosition(), laser.A));
 
-                //line.B = shot.LastPosition();
-
                 shot.Die();
             }
         }
 
-        public bool MoveObject(IMoveable mvObj, Vector3d direction)
+        public bool MoveObject(IMoveable mvObj, Point3d direction)
         {
-            Vector3d oldPosition = new Vector3d(mvObj.GetPosition().X, mvObj.GetPosition().Y, mvObj.GetPosition().Z);
+            Point3d oldPosition = new Point3d(mvObj.GetPosition().X, mvObj.GetPosition().Y, mvObj.GetPosition().Z);
 
             mvObj.Move(direction);
 
@@ -118,14 +116,21 @@ namespace Mood
         {
             Random random = new Random();
 
-            AddObject(new Sphere(new Vector3d((float)random.NextDouble() * 6f - 3f, -0.5f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue));
+            Sphere s = new Sphere(new Point3d((float)random.NextDouble() * 6f - 3f, -0.5f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue);
+
+            while (HitTest(s) != null)
+            {
+                s = new Sphere(new Point3d((float)random.NextDouble() * 6f - 3f, -0.5f, (float)random.NextDouble() * 6f - 3f), 0.5d, Color.Blue);
+            }
+
+            AddObject(s);
         }
 
         public void Draw()
         {
             foreach (WorldObject obj in Objects)
             {
-                if (obj is Laser && ((lastLaser == obj && !ShowLastLaser) || (lastLaser != obj && !ShowAllLasers)))
+                if (obj is Hit && ((lastLaser == obj && !ShowLastLaser) || (lastLaser != obj && !ShowAllLasers)))
                     continue;
                 
                 obj.Draw();

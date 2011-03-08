@@ -7,18 +7,18 @@ namespace Mood
 {
     public class Player : IHitable
     {
-        public Vector3d Position { get; set; }
+        public Point3d Position { get; set; }
 
         public Player()
         {
-            Position = new Vector3d();
+            Position = new Point3d();
         }
 
         public BoundingBox BoundingBox
         {
             get
             {
-                return new BoundingBox(Position + new Vector3d(-0.2f, 0f, 0.2f), Position + new Vector3d(0.2f, 0f, 0.2f), Position + new Vector3d(-0.2f, 0f, -0.2f), Position + new Vector3d(0.2f, 0f, -0.2f));
+                return new BoundingBox(Position + new Point3d(-0.2f, 0f, 0.2f), Position + new Point3d(0.2f, 0f, 0.2f), Position + new Point3d(-0.2f, 0f, -0.2f), Position + new Point3d(0.2f, 0f, -0.2f));
             }
             set
             {

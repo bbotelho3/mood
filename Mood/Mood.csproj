@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="BoundingBox.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="Cube.cs" />
     <Compile Include="Floor.cs" />
     <Compile Include="FPSCamera.cs" />
     <Compile Include="frmMain.cs">
@@ -72,7 +71,7 @@
     <Compile Include="IMoveable.cs" />
     <Compile Include="IPositionable.cs" />
     <Compile Include="IShootable.cs" />
-    <Compile Include="Laser.cs" />
+    <Compile Include="Hit.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,7 +101,7 @@
     <Compile Include="Sphere.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="TopCamera.cs" />
-    <Compile Include="Vector3d.cs" />
+    <Compile Include="Point3d.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="Weapon.cs" />
     <Compile Include="World.cs" />

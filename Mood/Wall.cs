@@ -5,10 +5,10 @@ namespace Mood
 {
     public class Wall : WorldObject, IHitable
     {
-        public Vector3d A { get; set; }
-        public Vector3d B { get; set; }
-        public Vector3d C { get; set; }
-        public Vector3d D { get; set; }
+        public Point3d A { get; set; }
+        public Point3d B { get; set; }
+        public Point3d C { get; set; }
+        public Point3d D { get; set; }
 
         public double Height { get; set; }
 
@@ -16,7 +16,7 @@ namespace Mood
 
         private Texture texture;
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d)
+        public Wall(Point3d a, Point3d b, Point3d c, Point3d d)
         {
             A = a;
             B = b;
@@ -30,13 +30,13 @@ namespace Mood
             BoundingBox = new BoundingBox(A, B, C, D);
         }
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Color color)
+        public Wall(Point3d a, Point3d b, Point3d c, Point3d d, Color color)
             : this(a, b, c, d)
         {
             this.color = color;
         }
 
-        public Wall(Vector3d a, Vector3d b, Vector3d c, Vector3d d, Texture texture)
+        public Wall(Point3d a, Point3d b, Point3d c, Point3d d, Texture texture)
             : this(a, b, c, d)
         {
             this.texture = texture;

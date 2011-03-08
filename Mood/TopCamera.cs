@@ -10,7 +10,7 @@ namespace Mood
         public TopCamera() : base()
         {
             this.rotatedXAngle = 90;
-            this.cameraEye = new Vector3d(0, 3.5f, 0);
+            this.cameraEye = new Point3d(0, 3.5f, 0);
         }
 
         public override void RotateY(double angle)

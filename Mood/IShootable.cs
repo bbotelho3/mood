@@ -4,7 +4,7 @@
     {
         bool IsDead { get; set; }
 
-        bool ShootTest(Laser laser);
+        bool ShootTest(Hit laser);
 
         void Die();
     }

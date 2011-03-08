@@ -3,8 +3,8 @@ namespace Mood
 {
     public interface IPositionable
     {
-        Vector3d GetPosition();
+        Point3d GetPosition();
 
-        void SetPosition(Vector3d position);
+        void SetPosition(Point3d position);
     }
 }

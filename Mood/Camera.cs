@@ -11,32 +11,28 @@ namespace Mood
     {
         protected const float PIdiv180 = (float)Math.PI / 180;
 
-        public Vector3d cameraEye;
-        public Vector3d cameraDirection;
-        private Vector3d cameraUp;
+        public Point3d cameraEye;
+        public Point3d cameraDirection;
+        private Point3d cameraUp;
 
         protected double rotatedYAngle;
         protected double rotatedXAngle;
-        protected Vector3d firstCameraDirection;
+        protected Point3d firstCameraDirection;
 
         public Camera()
         {
-            this.cameraEye = new Vector3d(0, 0, 0);
-            this.cameraDirection = new Vector3d(0, 0, -1);
-            this.cameraUp = new Vector3d(0, 1, 0);
+            this.cameraEye = new Point3d(0, 0, 0);
+            this.cameraDirection = new Point3d(0, 0, -1);
+            this.cameraUp = new Point3d(0, 1, 0);
 
-            this.firstCameraDirection = new Vector3d(cameraDirection);
+            this.firstCameraDirection = new Point3d(cameraDirection);
             this.rotatedXAngle = this.rotatedYAngle = 0;
         }
 
         public virtual void MoveFwBw(double step)
         {
-            //double angleY = this.rotatedYAngle * PIdiv180;
+            Point3d vector = cameraDirection - cameraEye;
 
-            //Vector3d trans = firstCameraDirection * rotationY(angleY);
-            //Vector3d dir = cameraEye + trans;
-
-            Vector3d vector = cameraDirection - cameraEye;
             cameraEye.X += vector.X * (float)step;
             cameraEye.Y += vector.Y * (float)step;
             cameraEye.Z += vector.Z * (float)step;
@@ -48,17 +44,11 @@ namespace Mood
         public virtual void RotateY(double angle)
         {
             this.rotatedYAngle += angle;
-            //Vector3d transl = cameraDirection - cameraEye;
-            //cameraDirection.X = cameraEye.X +(float)(Math.Cos(angle) * transl.X - Math.Sin(angle) * transl.Z);
-            //cameraDirection.Z = cameraEye.Z +(float)(Math.Sin(angle) * transl.X + Math.Cos(angle) * transl.Z);
         }
 
         public virtual void RotateX(double angle)
         {
             this.rotatedXAngle += angle;
-            //Vector3d ray = cameraDirection - cameraEye;
-            //cameraDirection.Y = cameraEye.Y + (float)(Math.Cos(angle) * ray.Y + Math.Sin(angle) * ray.Z);
-            //cameraDirection.Z = cameraEye.Z + (float)(-Math.Sin(angle) * ray.Y + Math.Cos(angle) * ray.Z);
         }
 
         public void Render()
@@ -66,7 +56,7 @@ namespace Mood
             double angleY = this.rotatedYAngle * PIdiv180;
             double angleX = this.rotatedXAngle * PIdiv180;
 
-            Vector3d trans = firstCameraDirection * (rotationX(angleX) * rotationY(angleY));
+            Point3d trans = firstCameraDirection * (rotationX(angleX) * rotationY(angleY));
 
             cameraDirection = cameraEye + trans;
 
@@ -99,12 +89,12 @@ namespace Mood
             //0 0 0 1
         }
 
-        public Vector3d getCameraEye()
+        public Point3d getCameraEye()
         {
             return this.cameraEye;
         }
 
-        public Vector3d getCameraDirection()
+        public Point3d getCameraDirection()
         {
             return this.cameraDirection;
         }

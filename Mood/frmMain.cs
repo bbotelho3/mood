@@ -49,18 +49,18 @@ namespace Mood
             Texture brickWall = new Texture(Resources.brick1);
             Texture woodFloor = new Texture(Resources.Wooden_Floor_01);
 
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), brickWall));
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), new Texture(Resources.Dock)));
-            world.AddObject(new Wall(new Vector3d(3, -1, 3), new Vector3d(3, 1, 3), new Vector3d(-3, 1, 3), new Vector3d(-3, -1, 3), brickWall));
-            world.AddObject(new Wall(new Vector3d(-3, -1, -3), new Vector3d(-3, 1, -3), new Vector3d(3, 1, -3), new Vector3d(3, -1, -3), brickWall));
-            world.AddObject(new Floor(new Vector3d(-3, -1, -3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), woodFloor));
-            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), new Vector3d(3, -1, 3), new Vector3d(3, -1, 0), woodFloor));
-            world.AddObject(new Floor(new Vector3d(0, -1, 0), new Vector3d(0, -1, -3), new Vector3d(3, -1, -3), new Vector3d(3, -1, 0), woodFloor));
-            world.AddObject(new Floor(new Vector3d(-3, -1, 3), new Vector3d(-3, -1, 0), new Vector3d(0, -1, 0), new Vector3d(0, -1, 3), woodFloor));
-            world.AddObject(new Sphere(new Vector3d(1, -0.5f, 1), 0.5d, Color.Blue));
+            world.AddObject(new Wall(new Point3d(3, -1, 3), new Point3d(3, 1, 3), new Point3d(3, 1, -3), new Point3d(3, -1, -3), brickWall));
+            world.AddObject(new Wall(new Point3d(-3, -1, -3), new Point3d(-3, 1, -3), new Point3d(-3, 1, 3), new Point3d(-3, -1, 3), new Texture(Resources.Dock)));
+            world.AddObject(new Wall(new Point3d(3, -1, 3), new Point3d(3, 1, 3), new Point3d(-3, 1, 3), new Point3d(-3, -1, 3), brickWall));
+            world.AddObject(new Wall(new Point3d(-3, -1, -3), new Point3d(-3, 1, -3), new Point3d(3, 1, -3), new Point3d(3, -1, -3), brickWall));
+            world.AddObject(new Floor(new Point3d(-3, -1, -3), new Point3d(-3, -1, 0), new Point3d(0, -1, 0), new Point3d(0, -1, -3), woodFloor));
+            world.AddObject(new Floor(new Point3d(0, -1, 0), new Point3d(0, -1, 3), new Point3d(3, -1, 3), new Point3d(3, -1, 0), woodFloor));
+            world.AddObject(new Floor(new Point3d(0, -1, 0), new Point3d(0, -1, -3), new Point3d(3, -1, -3), new Point3d(3, -1, 0), woodFloor));
+            world.AddObject(new Floor(new Point3d(-3, -1, 3), new Point3d(-3, -1, 0), new Point3d(0, -1, 0), new Point3d(0, -1, 3), woodFloor));
+            world.AddObject(new Sphere(new Point3d(1, -0.5f, 1), 0.5d, Color.Blue));
 
             weapons = new Weapon[2];
-            weapons[0] = new Weapon(0.001f, Resources.CrowBar);
+            weapons[0] = new Weapon(-0.4f, Resources.CrowBar);
             weapons[1] = new Weapon(20, Resources.Pistol);
             
             selectedWeapon = (int)WeaponType.Pistol;
@@ -162,8 +162,8 @@ namespace Mood
 
         private void ogl_KeyDown(object sender, KeyEventArgs e)
         {
-            Vector3d lastPosition = new Vector3d(fpsCamera.getCameraEye().X, fpsCamera.getCameraEye().Y, fpsCamera.getCameraEye().Z);
-            Vector3d lastDirection = new Vector3d(fpsCamera.getCameraDirection().X, fpsCamera.getCameraDirection().Y, fpsCamera.getCameraDirection().Z);
+            Point3d lastPosition = new Point3d(fpsCamera.getCameraEye().X, fpsCamera.getCameraEye().Y, fpsCamera.getCameraEye().Z);
+            Point3d lastDirection = new Point3d(fpsCamera.getCameraDirection().X, fpsCamera.getCameraDirection().Y, fpsCamera.getCameraDirection().Z);
 
             if (e.KeyCode == Keys.D1)
             {
@@ -202,6 +202,11 @@ namespace Mood
                 world.ShowAllLasers = !world.ShowAllLasers;
             }
 
+            if (e.KeyCode == Keys.K)
+            {
+                world.ShowLastLaser = !world.ShowLastLaser;
+            }
+
             if (e.KeyCode == Keys.M)
             {
                 if (this.cameraStyle == CameraStyle.FPS)
@@ -216,11 +221,11 @@ namespace Mood
 
             if (e.KeyCode == Keys.Space)
             {
-                Laser laser = new Laser(new Vector3d(fpsCamera.cameraEye), new Vector3d(fpsCamera.cameraDirection), this.weapons[selectedWeapon].Range, Color.Blue);
+                Hit hit = new Hit(new Point3d(fpsCamera.cameraEye), new Point3d(fpsCamera.cameraDirection), this.weapons[selectedWeapon].Range, Color.Blue);
 
-                world.AddObject(laser);
+                world.AddObject(hit);
 
-                world.ShootTest(laser);
+                world.ShootTest(hit);
             }
 
             player.Position = fpsCamera.getCameraEye();
@@ -231,7 +236,7 @@ namespace Mood
             {
                 if (obj is IMoveable)
                 {
-                    Vector3d v = fpsCamera.cameraDirection - lastDirection;
+                    Point3d v = fpsCamera.cameraDirection - lastDirection;
 
                     world.MoveObject(obj as IMoveable, v);
                 }
